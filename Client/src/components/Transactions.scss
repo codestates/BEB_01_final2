@@ -23,6 +23,7 @@
     display: block;
 
     .transaction_list {
+      color: #fff;
       margin: 2%;
       background-color: #505458;
       box-shadow: 1px 4px 30px rgba(0, 0, 0, 0.2);
@@ -34,7 +35,14 @@
       border-radius: 10px;
       white-space: nowrap;
       overflow: scroll;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.1);
+        transition: 0.5s;
+      }
       div {
+        text-decoration: none;
         padding: 10px 20px;
       }
 
@@ -44,4 +52,14 @@
       }
     }
   }
+}
+
+.Loading {
+  text-align: center;
+  font-size: 60px;
+}
+
+a {
+  text-decoration: none;
+  list-style: none;
 }
