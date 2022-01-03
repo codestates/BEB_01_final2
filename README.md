@@ -4,6 +4,8 @@
 
 참고할만한 사진을 통해서 간단한 웹페이지를 꾸며보았습니다.
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/83758624/147934485-f5b5b2d1-0aea-436c-bb3d-398064e2030c.gif)
+
 ipfs를 활용하면 큰 데이터 또한 올바르게 전송 가능할수 있지만
 
 이떄까지 많이 ipfs를 활용해보앗기 때문에 따로 추가적인 활용은 하지 않았습니다.
