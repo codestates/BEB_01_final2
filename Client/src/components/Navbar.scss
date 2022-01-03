@@ -1,0 +1,46 @@
+.Navbar_app {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  width: 100%;
+
+  .Navbar_title {
+    margin-left: 10%;
+
+    img {
+      display: flex;
+      align-items: center;
+      width: 60%;
+    }
+  }
+  .Navbar_ul {
+    text-decoration: none;
+    list-style: none;
+    display: flex;
+    margin-right: 20%;
+    justify-content: center;
+    align-items: center;
+    li {
+      margin-left: 5%;
+      margin-right: 5%;
+      cursor: pointer;
+    }
+    button {
+      margin-left: 5%;
+      padding: 15px 30px;
+      border-radius: 20px;
+      border: none;
+      background-color: royalblue;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+        transition: 0.5s;
+      }
+    }
+  }
+}

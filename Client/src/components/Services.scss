@@ -1,0 +1,79 @@
+.Services_app {
+  padding-top: 20em;
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 100%, hsla(225, 39%, 25%, 1) 0, transparent 50%);
+  color: #fff;
+
+  .Services_container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+
+    .Services_one {
+      margin-top: 5%;
+      h1 {
+        font-size: 60px;
+        background: linear-gradient(to right, #fbcac9, #8ca6ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      div {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .Services_two {
+    width: 40%;
+    .Services_Security {
+      display: flex;
+      margin: 5%;
+      padding: 10px;
+      border: 2px solid #261c2c;
+      border-radius: 20px;
+      background-color: #082032;
+      img {
+        width: 10%;
+        height: 10%;
+        margin-right: 10px;
+      }
+    }
+
+    .Services_Best {
+      display: flex;
+      margin: 5%;
+      background-color: blue;
+      padding: 10px;
+      border: 2px solid #261c2c;
+      border-radius: 20px;
+      background-color: #082032;
+      img {
+        width: 10%;
+        height: 10%;
+        margin-right: 10px;
+      }
+    }
+
+    .Services_Fatest {
+      display: flex;
+      margin: 5%;
+      background-color: blue;
+      padding: 10px;
+      border: 2px solid #261c2c;
+      border-radius: 20px;
+      background-color: #082032;
+      img {
+        width: 10%;
+        height: 10%;
+        margin-right: 10px;
+      }
+    }
+  }
+}
