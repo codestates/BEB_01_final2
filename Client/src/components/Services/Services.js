@@ -15,7 +15,6 @@ function Services() {
         </div>
         <div className="Services_two">
           <div className="Services_Security">
-            <img src="./img/security.png" alt="search" />
             <div>
               <h2>Security gurantee</h2>
               <p>
@@ -25,8 +24,6 @@ function Services() {
             </div>
           </div>
           <div className="Services_Best">
-            {" "}
-            <img src="./img/search.jpeg" alt="search" />
             <div>
               <h2>Best exchange rates</h2>
               <p>
@@ -36,7 +33,6 @@ function Services() {
             </div>
           </div>
           <div className="Services_Fatest">
-            <img src="./img/heart.jpeg" alt="heart" />
             <div>
               <h2>Fastest transactions</h2>
               <p>

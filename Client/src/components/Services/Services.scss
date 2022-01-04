@@ -39,11 +39,6 @@
       border: 2px solid #261c2c;
       border-radius: 20px;
       background-color: #082032;
-      img {
-        width: 10%;
-        height: 10%;
-        margin-right: 10px;
-      }
     }
 
     .Services_Best {
@@ -54,11 +49,6 @@
       border: 2px solid #261c2c;
       border-radius: 20px;
       background-color: #082032;
-      img {
-        width: 10%;
-        height: 10%;
-        margin-right: 10px;
-      }
     }
 
     .Services_Fatest {
@@ -69,11 +59,12 @@
       border: 2px solid #261c2c;
       border-radius: 20px;
       background-color: #082032;
-      img {
-        width: 10%;
-        height: 10%;
-        margin-right: 10px;
-      }
     }
   }
+}
+
+h2 {
+  background: linear-gradient(to right, #fbcac9, #8ca6ce);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
