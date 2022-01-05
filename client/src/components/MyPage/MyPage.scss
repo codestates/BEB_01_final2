@@ -1,0 +1,183 @@
+.MyPage_App {
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+
+  padding-block-start: 5%;
+  padding-block-end: 15%;
+
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+
+  .MyPage_one {
+    margin-left: 8%;
+
+    .MyPage_Title {
+      .MyPage_h1 {
+        font-size: 50px;
+        background: linear-gradient(to right, #fbcac9, #8ca6ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .MyPage_explain {
+        margin: 10%;
+        margin-left: 30%;
+        font-size: 30px;
+        background: linear-gradient(to right, #fbcac9, #8ca6ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .MyPage_title_button {
+        margin: 50px;
+        padding: 15px;
+        background-color: royalblue;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        cursor: pointer;
+        &:hover {
+          transition: 0.5s;
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .MyPage_title_button2 {
+      margin: 10px;
+      padding: 10px;
+      background-color: royalblue;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      &:hover {
+        transition: 0.5s;
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .MyPage_title_button3 {
+    margin: 10px;
+    padding: 10px;
+    background-color: royalblue;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    &:hover {
+      transition: 0.5s;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.MyPage_title_text {
+  margin-top: 10%;
+}
+
+.MyPage_lists {
+  display: block;
+  width: 60%;
+  margin-top: 20px;
+  .MyPage_list {
+    float: left;
+    margin: 10px;
+    padding: 30px;
+    border: 1px solid #fff;
+    border-radius: 20px 0px;
+    cursor: pointer;
+    &:hover {
+      transition: 0.5s;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.MyPageChar_App {
+  box-shadow: 1px 1px 1px 3px black;
+  border: none;
+  background-color: #846d74;
+  background-image: radial-gradient(
+      at 30% 30%,
+      hsla(225, 39%, 30%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 80%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+  border-radius: 20px;
+  margin-right: 5%;
+  margin-left: 5%;
+  width: 50%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+
+  .MyPageChar_Img {
+    margin: 10%;
+    height: 50%;
+    margin-bottom: 0px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background-color: #fff;
+      border-radius: 10px;
+    }
+  }
+
+  .MyPage_title_account {
+    margin: 20px;
+    font-size: 30px;
+    background: linear-gradient(to right, #fbcac9, #8ca6ce);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .MyPageChar_form {
+    display: flex;
+    flex-direction: column;
+    font-weight: 800;
+
+    .MyPageChar_name {
+      padding: 10px;
+      margin-top: 20px;
+      margin-left: 70px;
+      border-radius: 10px;
+    }
+    .MyPageChar_address {
+      padding: 10px;
+      margin-left: 70px;
+    }
+    .MyPageChar_level {
+      padding: 10px;
+      margin-left: 70px;
+    }
+    .MyPageChar_attack {
+      padding: 10px;
+      margin-left: 70px;
+    }
+    .MyPageChar_sol {
+      padding: 10px;
+      margin-left: 70px;
+    }
+    .MyPageChar_land {
+      padding: 10px;
+      margin-left: 70px;
+      margin-bottom: 30px;
+    }
+  }
+}
