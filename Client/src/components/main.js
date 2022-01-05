@@ -4,3 +4,5 @@ export { default as Welcome } from "./Welcome/Welcome";
 export { default as Homepage } from "./Homepage";
 export { default as SignIn } from "./SignIn/SignIn";
 export { default as Mypage } from "./Mypage/Mypage";
+export { default as CryptoWorld } from "./CryptoWorld/CryptoWorld";
+export { default as Member } from "./Member/Member";

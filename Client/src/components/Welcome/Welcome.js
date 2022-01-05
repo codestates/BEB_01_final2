@@ -1,5 +1,5 @@
 import React from "react";
-// import { makeShortAddress } from "../../utils/function/function";
+import { makeShortAddress } from "../../utils/function/function";
 
 import "./Welcome.scss";
 
@@ -34,9 +34,8 @@ function Welcome() {
           <div className="Char_name">이름 : ㄴ아린ㅇ란라</div>
           <div className="Char_address">
             계정주소 :
-            {/* {makeShortAddress("0xaea07e179dfc59dd118005a4a56768a51ad8f48b")} */}
+            {makeShortAddress("0xaea07e179dfc59dd118005a4a56768a51ad8f48b")}
           </div>
-          <div className="Char_level">레벨 : 1</div>
           <div className="Char_attack">공격력 : 1</div>
           <div className="Char_sol">병력 : 1</div>
           <div className="Char_land">소유한 땅 : 1</div>
