@@ -31,10 +31,17 @@
     justify-content: space-between;
     align-items: center;
     width: 30%;
+
     li {
       margin-left: 5%;
       margin-right: 5%;
       cursor: pointer;
+      width: max-content;
     }
   }
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
 }

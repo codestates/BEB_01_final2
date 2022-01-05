@@ -27,14 +27,17 @@
   .NavBar_ul {
     list-style: none;
     display: flex;
-    margin-right: 50%;
+    margin-right: 300px;
     justify-content: space-between;
     align-items: center;
-    width: 50%;
+    width: 100%;
+
     li {
       margin-left: 10%;
       margin-right: 10%;
       cursor: pointer;
+      width: max-content;
+      padding: 20px;
     }
   }
 }
@@ -42,4 +45,8 @@
 .menu-item {
   color: #fff;
   margin-right: 10%;
+}
+
+a {
+  text-decoration: none;
 }

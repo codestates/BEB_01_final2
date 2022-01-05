@@ -1,16 +1,26 @@
 import React from "react";
 import "./Navbar.scss";
 
+import { Link } from "react-router-dom";
 function Navbar() {
   return (
     <div className="Navbar_app">
       <div className="Navbar_title">
-        <img src="./img/logo.png" alt="logo" />
+        <Link to="/">
+          <img src="./img/logo.png" alt="logo" />
+        </Link>
       </div>
+      Your Token : 3
       <ul className="Navbar_ul">
-        <li>My Room</li>
-        <li>SignIn</li>
-        <li>Crypto World</li>
+        <Link to="/MyPage">
+          <li>My Room</li>
+        </Link>
+        <Link to="/SignIn">
+          <li>SignIn</li>
+        </Link>
+        <Link to="/CryptoWorld">
+          <li>Crypto World</li>
+        </Link>
       </ul>
     </div>
   );
