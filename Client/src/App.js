@@ -1,17 +1,18 @@
 import "./App.css";
 import { Route, Switch } from "react-router-dom";
 import {
-  Navbar,
+  NavBar,
   Homepage,
   SignIn,
-  Mypage,
+  MyPage,
   CryptoWorld,
 } from "./components/main";
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <NavBar />
+
       <Switch>
         <Route exact path="/">
           <Homepage />
@@ -20,7 +21,7 @@ function App() {
           <SignIn />
         </Route>
         <Route path="/MyPage">
-          <Mypage />
+          <MyPage />
         </Route>
         <Route path="/CryptoWorld">
           <CryptoWorld />
