@@ -67,23 +67,27 @@
         display: flex;
         align-items: center;
         margin-top: 3px;
+        color: #fff;
       }
       .Map_topography {
         display: flex;
         align-items: center;
         margin-top: 3px;
+        color: #fff;
       }
 
       .Map_Token {
         display: flex;
         align-items: center;
         margin-top: 3px;
+        color: #fff;
       }
 
       .Map_Owner {
         display: flex;
         align-items: center;
         margin-top: 3px;
+        color: #fff;
       }
       h4 {
         font-weight: 800;
@@ -98,8 +102,6 @@
   }
 }
 
-.Loading {
-  position: absolute;
-  top: 40%;
-  left: 40%;
+a {
+  text-decoration: none;
 }

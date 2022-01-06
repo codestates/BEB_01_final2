@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./CryptoWorld.scss";
 import axios from "axios";
+import { Link } from "react-router-dom";
 function CryptoWorld() {
   const [data, SetData] = useState(false);
 
@@ -23,27 +24,29 @@ function CryptoWorld() {
           />
         ) : (
           <>
-            {data[0].owner.map((reuslt, idx) => {
+            {data.map((reuslt) => {
               return (
-                <div className="Map_App" key={idx}>
-                  <div className="Map_img">
-                    <img src={data[0].src[idx]} alt={data[0].src[idx]} />
+                <Link to={`/detail/:${reuslt.idx}`} key={reuslt.idx}>
+                  <div className="Map_App">
+                    <div className="Map_img">
+                      <img src={reuslt.src} alt={reuslt.src} />
+                    </div>
+                    <div className="Map_Text">
+                      <div className="Map_name">
+                        <h4>mapName</h4> {reuslt.MapName}
+                      </div>
+                      <div className="Map_topography">
+                        <h4>topography</h4> {reuslt.topography}
+                      </div>
+                      <div className="Map_Token">
+                        <h4>Token</h4> {reuslt.GiveToken}
+                      </div>
+                      <div className="Map_Owner">
+                        <h4>Owner</h4> {reuslt.owner}
+                      </div>
+                    </div>
                   </div>
-                  <div className="Map_Text">
-                    <div className="Map_name">
-                      <h4>mapName</h4> {data[0].MapName[idx]}
-                    </div>
-                    <div className="Map_topography">
-                      <h4>topography</h4> {data[0].topography[idx]}
-                    </div>
-                    <div className="Map_Token">
-                      <h4>Token</h4> {data[0].GiveToken[idx]}
-                    </div>
-                    <div className="Map_Owner">
-                      <h4>Owner</h4> {data[0].owner[idx]}
-                    </div>
-                  </div>
-                </div>
+                </Link>
               );
             })}
           </>
