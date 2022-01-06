@@ -25,11 +25,12 @@ export const CharacterDB = mongoose.model("Character", CharacterSchema);
 
 const MapSchema = mongoose.Schema({
   reload: Boolean,
-  owner: [String],
-  MapName: [String],
-  topography: [String],
-  GiveToken: [Number],
-  src: [String],
+  idx: Number,
+  owner: String,
+  MapName: String,
+  topography: String,
+  GiveToken: String,
+  src: String,
 });
 
 export const MapDB = mongoose.model("Map", MapSchema);

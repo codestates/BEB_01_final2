@@ -12,3 +12,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.Loading {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+}

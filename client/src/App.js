@@ -3,9 +3,11 @@ import { Route, Switch } from "react-router-dom";
 import {
   NavBar,
   Homepage,
-  SignIn,
   MyPage,
   CryptoWorld,
+  DetailWorld,
+  Shop,
+  Login,
 } from "./components/main";
 
 function App() {
@@ -17,14 +19,21 @@ function App() {
         <Route exact path="/">
           <Homepage />
         </Route>
-        <Route path="/SignIn">
-          <SignIn />
+        <Route path="/Shop">
+          <Shop />
         </Route>
+        <Route path="/Login">
+          <Login />
+        </Route>
+
         <Route path="/MyPage">
           <MyPage />
         </Route>
         <Route path="/CryptoWorld">
           <CryptoWorld />
+        </Route>
+        <Route path="/detail/:id">
+          <DetailWorld />
         </Route>
       </Switch>
     </div>

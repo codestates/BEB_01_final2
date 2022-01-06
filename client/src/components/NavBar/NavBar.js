@@ -21,12 +21,12 @@ function NavBar() {
             <li>Crypto World</li>
           </Link>
 
-          <Link to="/SignIn" className="menu-item">
-            <li>SignIn</li>
+          <Link to="/Login" className="menu-item">
+            <li>Login</li>
           </Link>
 
-          <Link to="/LogIn" className="menu-item">
-            <li>LogIn</li>
+          <Link to="/Shop" className="menu-item">
+            <li>Shop</li>
           </Link>
         </ul>
       </div>
