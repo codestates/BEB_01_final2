@@ -70,7 +70,7 @@ contract Token is TokenInterface {
         emit Transfer(address(0), msg.sender, amount);
     }
 
-    function transfer(address recipient, uint amount) public virtual override returns (bool) {
+    function transfer(address recipient, uint amount) public virtual override isMint(msg.sender) returns (bool) {
         _transfer(msg.sender, recipient, amount);
         emit Transfer(msg.sender, recipient, amount);
         return true;
@@ -78,7 +78,7 @@ contract Token is TokenInterface {
 
     
 
-    function _transfer(address sender, address recipient, uint256 amount) isMint(sender) internal {
+    function _transfer(address sender, address recipient, uint256 amount) internal {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
         //uint256 senderBalance = _GoldBalances[sender];
@@ -96,7 +96,7 @@ contract Token is TokenInterface {
 
   
 
-    function _approve(address owner, address spender, uint256 amount) internal isMint(owner) isMint(spender) returns (bool){
+    function _approve(address owner, address spender, uint256 amount) internal  returns (bool){
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 
@@ -105,22 +105,38 @@ contract Token is TokenInterface {
         return true;
     }
 
-
-     function approve(address spender, uint amount) external virtual returns (bool) {
+     function approve(address spender, uint amount) external virtual isMint(msg.sender) isMint(msg.sender) returns (bool) {
         uint256 currentAllownace = _allowances[msg.sender][spender];
         require(currentAllownace >= amount, "ERC20: Transfer amount exceeds allowance");
         _approve(msg.sender, spender, amount);
         return true;
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount) external isMint(sender) returns (bool) {
-        uint256 currentAllowance = _allowances[sender][recipient];
-        // 일단 전송사자 자신과 CA사이에 _allowances값이 있는지 확인
-        // 이 부분은 mintGold를 실행시킬떄에 _allowances[사용자][TokenCA] 구조를 만들어 주기 떄문에 민팅한 사용자만 해당 require문을 통과 가능
-        require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
-
+    function transferFrom(address sender, address recipient, uint256 amount) external virtual override isMint(msg.sender)
+    returns (bool) {
         _transfer(sender, recipient, amount);
+        emit Transfer(msg.sender, sender, recipient, amount);
+        uint256 currentAllowance = _allowances[sender][msg.sender];
+        require(currentAllowance >= amount, "ERC20: transfer amount exceeds allowance");
+        _approve(sender, msg.sender, currentAllowance - amount);
         return true;
+    }
+
+    function _burn(address account, uint256 amount) internal virtual isMint(msg.sender){
+        require(account != address(0), "ERC20: burn from the zero address");
+
+        uint256 accountBalance = _GoldBalances[account];
+        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        unchecked {
+            _GoldBalances[account] = accountBalance - amount;
+        }
+        _GoldTotalSupply -= amount;
+
+        emit Transfer(account, address(0), amount);
+    }
+
+    function burn(address account, uint256 amount) external{
+        _burn(account, amount);
     }
    
 }
