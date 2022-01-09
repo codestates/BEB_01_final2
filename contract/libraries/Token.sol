@@ -138,5 +138,36 @@ contract Token is TokenInterface {
     function burn(address account, uint256 amount) external{
         _burn(account, amount);
     }
+/*
+    function transferFrom(
+        address sender,
+        address checkCA,
+        address recipient,
+        uint256 amount
+    ) public returns (bool) {
+        uint256 currentAllowance = _allowances[sender][checkCA];
+        // 일단 전송사자 자신과 CA사이에 _allowances값이 있는지 확인
+        // 이 부분은 mintGold를 실행시킬떄에 _allowances[사용자][TokenCA] 구조를 만들어 주기 떄문에 민팅한 사용자만 해당 require문을 통과 가능
+        require(
+            currentAllowance >= amount,
+            "ERC20: transfer amount exceeds allowance"
+        );
+
+        _transfer(sender, recipient, checkCA, amount);
+        return true;
+    }
+
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal {
+        require(owner != address(0), "ERC20: approve from the zero address");
+        require(spender != address(0), "ERC20: approve to the zero address");
+
+        _allowances[owner][spender] = amount;
+        emit Approval(owner, spender, amount);
+    }
+    */
    
 }
