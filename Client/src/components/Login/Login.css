@@ -1,0 +1,44 @@
+.Login_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 50%, hsla(225, 39%, 30%, 1) 0, transparent 50%);
+}
+
+.Login_container {
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 30%;
+  height: 30%;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+}
+.signin {
+  width: 100%;
+  background-color: transparent;
+
+  color: rgb(136, 40, 40);
+}
+
+.Google_button {
+  width: max-content;
+  background: linear-gradient(to right, #fbcac9, #8ca6ce);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #fff;
+}

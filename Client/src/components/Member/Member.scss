@@ -1,0 +1,55 @@
+.Member_app {
+  padding-top: 10%;
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 50%, hsla(225, 39%, 25%, 1) 0, transparent 50%);
+  padding-bottom: 10%;
+
+  .member_h2 {
+    text-align: center;
+    font-weight: 800;
+    font-size: 80px;
+    margin-bottom: 5%;
+  }
+  .member_container {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+
+    .member_title {
+      margin-left: 5%;
+      float: left;
+      width: 20%;
+      position: relative;
+
+      .member_position {
+        margin-bottom: 0px;
+        font-weight: 800;
+        font-size: 20px;
+        color: #fbcac9;
+        margin: 0px;
+
+        .position_detail {
+          color: #fff;
+          font-weight: 500;
+          font-size: 20px;
+        }
+      }
+
+      .member_text {
+        position: absolute;
+        top: 100px;
+      }
+
+      img {
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
