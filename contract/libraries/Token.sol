@@ -20,8 +20,9 @@ contract Token is TokenInterface {
     mapping(address => bool) private _check;
 
     uint256 private _GoldTotalSupply;
-    string private _name = "gold";
-    string private _symbol = "GOLD";
+    string private _name;
+    string private _symbol;
+    uint256 private _decimals;
 
     modifier isMint(address account){
         require(_check[account] == true, "Address without minting");
@@ -40,16 +41,20 @@ contract Token is TokenInterface {
         return _GoldBalances[account];
     }
 
+    function decimals() public view virtual returns (uint8) {
+        return 0;
+    }
+
     function allowance(address owner, address spender)public view returns (uint256)
     {
         return _allowances[owner][spender];
     }
 
-    function name() public view returns (string memory) {
+    function name() public virtual view returns (string memory) {
         return _name;
     }
 
-    function symbol() public view returns (string memory) {
+    function symbol() public virtual view returns (string memory) {
         return _symbol;
     }
 
@@ -105,7 +110,7 @@ contract Token is TokenInterface {
         return true;
     }
 
-     function approve(address spender, uint amount) external virtual isMint(msg.sender) isMint(msg.sender) returns (bool) {
+     function approve(address spender, uint amount) external virtual override isMint(msg.sender) isMint(msg.sender) returns (bool) {
         uint256 currentAllownace = _allowances[msg.sender][spender];
         require(currentAllownace >= amount, "ERC20: Transfer amount exceeds allowance");
         _approve(msg.sender, spender, amount);
@@ -152,11 +157,9 @@ contract Token is TokenInterface {
             currentAllowance >= amount,
             "ERC20: transfer amount exceeds allowance"
         );
-
         _transfer(sender, recipient, checkCA, amount);
         return true;
     }
-
     function _approve(
         address owner,
         address spender,
@@ -164,7 +167,6 @@ contract Token is TokenInterface {
     ) internal {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
-
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
