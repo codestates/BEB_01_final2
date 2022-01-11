@@ -1,0 +1,167 @@
+.Shop_App {
+  color: #fff;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4%;
+
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+
+  .Shop_one {
+    margin-left: 30%;
+
+    .Shop_Title {
+      .Shop_h1 {
+        font-size: 60px;
+        background: linear-gradient(to right, #fbcac9, #8ca6ce);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .Shop_explain {
+        font-size: 20px;
+        margin-top: 3%;
+      }
+
+      .Shop_title_button {
+        margin: 10px;
+        margin-top: 3%;
+        margin-left: 15%;
+        padding: 20px;
+        background-color: royalblue;
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 800;
+        cursor: pointer;
+
+        // transform: translate(-50%, -50%);
+
+        box-sizing: border-box;
+        background-color: #ffaaaa;
+        border-radius: 10px;
+        box-shadow: 1px 1px 15px #ff9999;
+        // width: 100%;
+        max-width: 360px;
+
+        display: flex;
+        justify-content: center;
+        text-align: center;
+
+        &:hover {
+          transition: 0.5s;
+          transform: scale(1.1);
+        }
+      }
+    }
+
+    .Shop_lists {
+      display: block;
+      width: 60%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      padding: 10px 20px;
+
+      .Shop_list {
+        float: left;
+        margin: 10px;
+        padding: 30px;
+        border: 1px solid #fff;
+        border-radius: 20px 0px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #fff;
+        &:hover {
+          transition: 0.5s;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+  .Shop_App {
+    box-shadow: 1px 1px 1px 2px black;
+    border: none;
+    background-color: #846d74;
+    background-image: radial-gradient(
+        at 30% 30%,
+        hsla(225, 39%, 30%, 1) 0,
+        transparent 50%
+      ),
+      radial-gradient(at 80% 80%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    border-radius: 20px;
+
+    width: 60%;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+
+    margin-top: 3%;
+
+    .Shop_Img {
+      margin: 3%;
+      height: 10%;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background-color: #fff;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+  //=====================================================
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    position: relative;
+    background-color: #ffeded;
+  }
+  .countBox {
+    transform: translate(-50%, -50%);
+    padding: 20px 50px;
+    box-sizing: border-box;
+    background-color: #ffaaaa;
+    border-radius: 10px;
+    box-shadow: 1px 1px 15px #ff9999;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  button {
+    border: 0;
+    background-color: transparent;
+  }
+}
+
+a {
+  text-decoration: none;
+}
