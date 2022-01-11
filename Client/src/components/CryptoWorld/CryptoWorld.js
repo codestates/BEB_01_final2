@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import "./CryptoWorld.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { makeShortAddress } from "../../utils/function/function";
 function CryptoWorld() {
   const [data, SetData] = useState(false);
-
+  console.log(makeShortAddress);
   useEffect(() => {
     const getData = async () => {
       await axios
@@ -42,7 +43,7 @@ function CryptoWorld() {
                         <h4>Token</h4> {reuslt.GiveToken}
                       </div>
                       <div className="Map_Owner">
-                        <h4>Owner</h4> {reuslt.owner}
+                        <h4>Owner</h4> {makeShortAddress(reuslt.owner)}
                       </div>
                     </div>
                   </div>

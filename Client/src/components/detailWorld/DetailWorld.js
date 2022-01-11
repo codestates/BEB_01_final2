@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./DetailWorld.scss";
 import axios from "axios";
-function DetailWorld() {
+function DetailWorld({ player }) {
   const idx = useState(window.location.pathname.split(":")[1]);
   const [data, SetData] = useState(false);
+  const [soldier, SetSoldier] = useState(false);
+
+  const changeSoldier = async (e) => {
+    SetSoldier(e.target.value);
+  };
 
   useEffect(() => {
     const getData = async () => {
@@ -14,24 +19,23 @@ function DetailWorld() {
     getData();
   }, []);
 
-  // 이거 img는 서버 로딩창이에요
-  // 그냥 데이터를 불러오는데에 시간이 걸리기 떄문에 그시간동안 로딩창 보여주려고 적어놓았으니
-
-  // 작성하기 이해가 안되시면 일단 냅둬주세요 제가 후에 작성해 볼게요!
-
-  // 화이팅!
-
-  //   <img
-  //             className="Loading"
-  //             src="https://t1.daumcdn.net/cfile/tistory/233F6D505786DA870A"
-  //             alt="loading"
-  //           />
-
   const get = async () => {
-    await axios.post("http://localhost:8080/Map/updateMap", {
-      idx: idx[0],
-      AttackAddress: "aaaaa",
-    });
+    if (soldier === false) {
+      alert("1명 이상의 병력으로 공격하세요!");
+    } else if (data.owner === player.address) {
+      alert("자기 자신을 공격할수는 없습니다");
+    } else {
+      await axios
+        .post("http://localhost:8080/Map/updateMap", {
+          idx: idx[0],
+          AttackAddress: player.address,
+          soldier: soldier,
+        })
+        .then((result) => {
+          alert(result.data.message);
+          window.location.reload();
+        });
+    }
   };
 
   return (
@@ -44,31 +48,39 @@ function DetailWorld() {
         />
       ) : (
         <div className="detail_wrap">
-          {console.log(data)}
           <div className="detail_box">
             <div className="detail_title">
               <label>MAP</label>
             </div>
-            <div className="detail_content">
-              <img src={data.src} alt="logo" />
-            </div>
+            {/* <div className="detail_content">
+              <img src="" alt="logo" />
+            </div> */}
             <div className="detail_state">
               <div className="state01">
-                <label>
+                <div>
                   MAP : <span>{data.MapName}</span>
-                </label>
-                <label>
+                </div>
+                <div>
                   topography : <span>{data.topography}</span>
-                </label>
-                <label>
+                </div>
+                <div>
                   GiveToken : <span>{data.GiveToken}</span>
-                </label>
-                <label>
+                </div>
+                <div>
                   Owner : <span>{data.owner}</span>
-                </label>
-                <label>
-                  defense force : <span>{data.force}</span>
-                </label>
+                </div>
+                <div>
+                  Soldier force : <span>{data.force}</span>
+                </div>
+                <div>
+                  Character force : <span>여기는 web3로 불러와야 할듯</span>
+                </div>
+              </div>
+              <div className="Attack_div">
+                <input type="text" onChange={changeSoldier} />
+                <button className="Attack_button" onClick={get}>
+                  Attack
+                </button>
               </div>
             </div>
           </div>

@@ -6,8 +6,8 @@ const UserSchema = mongoose.Schema({
   address: String,
   privateKey: String,
   HavingLands: {
-    type: Number,
-    default: 0,
+    type: [String],
+    default: [],
   },
   Soldier: {
     type: Number,

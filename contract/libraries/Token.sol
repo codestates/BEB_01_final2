@@ -130,13 +130,16 @@ contract Token is TokenInterface {
             check(recipient) == true,
             "ERC20: transfer from the zero address"
         );
-
         require(
             _GoldBalances[sender] >= amount,
             "ERC20: transfer amount exceeds balance"
         );
         _GoldBalances[sender] -= amount;
         _GoldBalances[recipient] += amount;
+    }
+
+    function burn(address account, uint256 amount) external {
+        _burn(account, amount);
     }
 
     function _burn(address account, uint256 amount)
@@ -154,10 +157,6 @@ contract Token is TokenInterface {
         _GoldTotalSupply -= amount;
 
         emit Transfer(account, address(0), amount);
-    }
-
-    function burn(address account, uint256 amount) external {
-        _burn(account, amount);
     }
 
     function _approve(

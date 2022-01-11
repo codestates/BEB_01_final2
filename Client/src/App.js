@@ -26,8 +26,6 @@ function App() {
   const [address, SetAddress] = useState(false);
   const [player, SetPlayer] = useState(false);
 
-  console.log(player);
-
   const onMount = async () => {
     const openlogin = new OpenLogin({
       clientId: VERIFIER.clientId,
@@ -102,7 +100,7 @@ function App() {
           <CryptoWorld />
         </Route>
         <Route path="/detail/:id">
-          <DetailWorld />
+          <DetailWorld player={player} />
         </Route>
         <Route path="/SignIn">
           <SignIn />
