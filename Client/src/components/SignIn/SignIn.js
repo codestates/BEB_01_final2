@@ -5,13 +5,9 @@ function SignIn() {
   const [name, SetName] = useState("");
   const [password, SetPassword] = useState("");
   const [ch, SetCh] = useState("");
-  const [Character, SetCharacter] = useState("");
 
   const NameChange = (e) => {
     SetName(e.target.value);
-  };
-  const CharacterChange = (e) => {
-    SetCharacter(e.target.value);
   };
 
   const PasswordChange = (e) => {
@@ -29,7 +25,6 @@ function SignIn() {
         .post("http://localhost:8080/makeuser", {
           ID: name,
           password: password,
-          CharacterName: Character,
         })
         .then((result) => {
           alert(result.data.message);
@@ -43,12 +38,6 @@ function SignIn() {
         <div className="SignIn_title">Make Your Account</div>
         <div>아이디</div>
         <input type="text" onChange={NameChange} placeholder="Name_input" />
-        <div>캐릭터 이름</div>
-        <input
-          type="text"
-          onChange={CharacterChange}
-          placeholder="Character_input"
-        />
         <div>패스워드</div>
         <input
           type="password"

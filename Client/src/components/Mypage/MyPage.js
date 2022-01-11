@@ -3,7 +3,7 @@ import "./MyPage.scss";
 
 import { NFTList } from "../main";
 
-function MyPage({ address, user }) {
+function MyPage({ player }) {
   return (
     <>
       <div className="MyPage_App">
@@ -13,19 +13,20 @@ function MyPage({ address, user }) {
           <h2> Enjoy Your Time</h2>
         </div>
         <div className="Status_Status">
-          <div>아이디 : 룰루랄라</div>
-          <div>주소 : 0xAea07E179dFC59dD118005A4A56768a51aD8F48b</div>
-          <div>캐릭터이름 : 비숑은 커엽다</div>
-          <div>PoW : 어쩃든 존나썜</div>
-          <div>병력수 : 3000</div>
-        </div>
-
-        <div className="MyPage_Title">
-          <img src="./img/MYpage.jpeg" alt="mypage" />
+          <div>주소 : {player.address}</div>
+          <div>PoW : solidity로 가져와야함;;</div>
+          <div>병력수 : {player.Soldier}</div>
         </div>
       </div>
       <div className="Status_app">
         <div className="Status_container">
+          <NFTList />
+          <NFTList />
+          <NFTList />
+          <NFTList />
+          <NFTList />
+          <NFTList />
+          <NFTList />
           <NFTList />
           <NFTList />
           <NFTList />

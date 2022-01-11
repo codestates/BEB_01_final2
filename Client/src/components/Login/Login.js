@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
-import { ethers } from "ethers";
 import { VERIFIER } from "../../utils/function/openLogin";
 
 function LogIn({ SetUser, openlogin, SetPrivKey }) {

@@ -1,5 +1,5 @@
 import "./App.css";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import {
   NavBar,
   Homepage,
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import OpenLogin from "@toruslabs/openlogin";
 import { VERIFIER } from "./utils/function/openLogin";
 import { ethers } from "ethers";
+import axios from "axios";
 
 function App() {
   const [user, SetUser] = useState(
@@ -23,6 +24,9 @@ function App() {
   const [openlogin, SetOpenLogin] = useState();
   const [privKey, SetPrivKey] = useState(false);
   const [address, SetAddress] = useState(false);
+  const [player, SetPlayer] = useState(false);
+
+  console.log(player);
 
   const onMount = async () => {
     const openlogin = new OpenLogin({
@@ -45,10 +49,34 @@ function App() {
       console.log(error);
     }
   };
+  const getUserData = async () => {
+    if (user !== false) {
+      await axios
+        .get("http://localhost:8080/vefiry", {
+          headers: {
+            Authorization: user,
+          },
+        })
+        .then((result) => {
+          SetPlayer(result.data);
+        });
+    }
+    if (address !== false) {
+      await axios
+        .post("http://localhost:8080/vefiry_google", {
+          address: address,
+        })
+        .then((result) => {
+          SetPlayer(result.data.data);
+        });
+    }
+  };
 
   useEffect(() => {
     onMount();
-  }, []);
+    getUserData();
+  }, [address]);
+
   return (
     <div className="App">
       <NavBar address={address} user={user} openlogin={openlogin} />
@@ -68,7 +96,7 @@ function App() {
           />
         </Route>
         <Route path="/MyPage">
-          <MyPage user={user} address={address} />
+          <MyPage player={player} />
         </Route>
         <Route path="/CryptoWorld">
           <CryptoWorld />
