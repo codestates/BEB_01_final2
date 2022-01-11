@@ -1,4 +1,4 @@
-import { UserDB } from "../models.js";
+import { CharacterDB } from "../models.js";
 
 export const makeCharacter = async () => {
   console.log("makeCharacter");

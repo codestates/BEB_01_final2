@@ -14,14 +14,14 @@ const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.URL;
 
-app.use("/User", User);
-app.use("/Character", CharacterRouter);
-app.use("/Map", MapRouter);
-
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extends: true }));
 app.use(cors());
+
+app.use("/", User);
+app.use("/Character", CharacterRouter);
+app.use("/Map", MapRouter);
 
 mongoose
   .connect(URL)

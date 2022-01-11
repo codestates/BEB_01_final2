@@ -1,0 +1,71 @@
+.MyPage_App {
+  color: #fff;
+  background-color: #3f0e03;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 100%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 100%, hsla(339, 49%, 30%, 1) 0, transparent 100%);
+
+  height: 30vh;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+
+  .Status_title {
+    padding: 30px;
+    z-index: 9999;
+  }
+  .Status_Status {
+    padding: 30px;
+    z-index: 9999;
+  }
+
+  .MyPage_Title {
+    text-align: center;
+    position: absolute;
+    top: 70%;
+    left: 45%;
+
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0px;
+
+    img {
+      width: 300px;
+      border-radius: 100%;
+      object-fit: contain;
+      z-index: 0px;
+    }
+  }
+}
+
+.Status_app {
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(339, 49%, 30%, 1) 0, transparent 100%);
+  min-height: 65vh;
+  display: flex;
+  padding-right: 4%;
+  padding-bottom: 5%;
+  padding-top: 7%;
+  width: 100%;
+
+  .Status_container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80em;
+    background-color: red;
+  }
+}
