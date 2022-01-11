@@ -1,5 +1,4 @@
 import { UserDB } from "../models.js";
-import { CharacterDB } from "../models.js";
 import { web3 } from "../web3/web3.js";
 
 import jwt from "jsonwebtoken";

@@ -1,4 +1,11 @@
-import { owner, MapName, idx, topography, src, giveToken } from "./MapData.js";
+import {
+  owner,
+  MapName,
+  idx,
+  topography,
+  src,
+  giveToken,
+} from "./Datadummy/MapData.js";
 import { MapDB } from "./models.js";
 
 export const SetMapData = async () => {

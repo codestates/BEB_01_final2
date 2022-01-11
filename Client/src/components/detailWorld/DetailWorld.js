@@ -9,7 +9,7 @@ function DetailWorld() {
     const getData = async () => {
       await axios
         .get(`http://localhost:8080/Map/detail/${idx[0]}`)
-        .then((result) => SetData(result.data));
+        .then((result) => SetData(result.data[0]));
     };
     getData();
   }, []);
@@ -33,10 +33,48 @@ function DetailWorld() {
       AttackAddress: "aaaaa",
     });
   };
+
   return (
-    <div>
-      <button onClick={get}>onclick</button>
-    </div>
+    <>
+      {data === false ? (
+        <img
+          className="Loading"
+          src="https://t1.daumcdn.net/cfile/tistory/233F6D505786DA870A"
+          alt="loading"
+        />
+      ) : (
+        <div className="detail_wrap">
+          {console.log(data)}
+          <div className="detail_box">
+            <div className="detail_title">
+              <label>MAP</label>
+            </div>
+            <div className="detail_content">
+              <img src={data.src} alt="logo" />
+            </div>
+            <div className="detail_state">
+              <div className="state01">
+                <label>
+                  MAP : <span>{data.MapName}</span>
+                </label>
+                <label>
+                  topography : <span>{data.topography}</span>
+                </label>
+                <label>
+                  GiveToken : <span>{data.GiveToken}</span>
+                </label>
+                <label>
+                  Owner : <span>{data.owner}</span>
+                </label>
+                <label>
+                  defense force : <span>{data.force}</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

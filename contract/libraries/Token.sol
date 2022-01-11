@@ -1,14 +1,16 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.10;
 
 interface TokenInterface {
     function GoldTotalSupply() external view returns (uint256);
 
     function balanceOf(address account) external view returns (uint256);
 
-    function transfer(address recipient, uint256 amount)
-        external
-        returns (bool);
+    function transfer(
+        address from,
+        address to,
+        uint256 amount
+    ) external returns (bool);
 
     function allowance(address owner, address spender)
         external
@@ -45,6 +47,7 @@ contract Token is TokenInterface {
     uint256 private _GoldTotalSupply;
     string private _name;
     string private _symbol;
+    uint256 private _decimals;
 
     modifier isMint(address account) {
         require(_check[account] == true, "Address without minting");
@@ -64,6 +67,10 @@ contract Token is TokenInterface {
         return _GoldBalances[account];
     }
 
+    function decimals() public view virtual returns (uint8) {
+        return 0;
+    }
+
     function allowance(address owner, address spender)
         public
         view
@@ -72,16 +79,85 @@ contract Token is TokenInterface {
         return _allowances[owner][spender];
     }
 
-    function name() public view returns (string memory) {
+    function name() public view virtual returns (string memory) {
         return _name;
     }
 
-    function symbol() public view returns (string memory) {
+    function symbol() public view virtual returns (string memory) {
         return _symbol;
     }
 
     function check(address account) public view returns (bool) {
         return _check[account];
+    }
+
+    function mintGold(uint256 amount, address to) public {
+        require(to != address(0), "No existed address");
+        require(amount > 0);
+        _check[to] = true;
+        _mintGold(amount, to);
+    }
+
+    function _mintGold(uint256 amount, address to) internal {
+        _GoldBalances[to] += amount;
+        _GoldTotalSupply += amount;
+        emit Transfer(address(0), msg.sender, amount);
+    }
+
+    function mintAllGold(uint256 amount, address[] memory to) public {
+        for (uint256 i = 0; i < to.length; i++) {
+            _mintGold(amount, to[i]);
+        }
+    }
+
+    function transfer(
+        address from,
+        address to,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        _transfer(from, to, amount);
+        emit Transfer(from, to, amount);
+        return true;
+    }
+
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal {
+        require(check(sender) == true, "ERC20: transfer from the zero address");
+        require(
+            check(recipient) == true,
+            "ERC20: transfer from the zero address"
+        );
+
+        require(
+            _GoldBalances[sender] >= amount,
+            "ERC20: transfer amount exceeds balance"
+        );
+        _GoldBalances[sender] -= amount;
+        _GoldBalances[recipient] += amount;
+    }
+
+    function _burn(address account, uint256 amount)
+        internal
+        virtual
+        isMint(msg.sender)
+    {
+        require(account != address(0), "ERC20: burn from the zero address");
+
+        uint256 accountBalance = _GoldBalances[account];
+        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
+        unchecked {
+            _GoldBalances[account] = accountBalance - amount;
+        }
+        _GoldTotalSupply -= amount;
+
+        emit Transfer(account, address(0), amount);
+    }
+
+    function burn(address account, uint256 amount) external {
+        _burn(account, amount);
     }
 
     function _approve(
@@ -100,6 +176,8 @@ contract Token is TokenInterface {
     function approve(address spender, uint256 amount)
         external
         virtual
+        override
+        isMint(msg.sender)
         isMint(msg.sender)
         returns (bool)
     {
@@ -126,72 +204,5 @@ contract Token is TokenInterface {
         );
         _approve(sender, msg.sender, currentAllowance - amount);
         return true;
-    }
-
-    function mintGold(uint256 amount, address to) public {
-        require(to != address(0x0), "No existed address");
-        require(amount > 0);
-        _check[to] = true;
-        _mintGold(amount, to);
-    }
-
-    function _mintGold(uint256 amount, address to) internal {
-        _GoldBalances[to] += amount;
-        _GoldTotalSupply += amount;
-        emit Transfer(msg.sender, to, amount);
-    }
-
-    function burn(address account, uint256 amount) external {
-        _burn(account, amount);
-    }
-
-    function _burn(address account, uint256 amount)
-        internal
-        virtual
-        isMint(msg.sender)
-    {
-        require(account != address(0), "ERC20: burn from the zero address");
-
-        uint256 accountBalance = _GoldBalances[account];
-        require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
-        unchecked {
-            _GoldBalances[account] = accountBalance - amount;
-        }
-        _GoldTotalSupply -= amount;
-
-        emit Transfer(account, address(0), amount);
-    }
-
-    function transfer(address recipient, uint256 amount)
-        public
-        virtual
-        isMint(msg.sender)
-        returns (
-            // 서버 계정에는 Token을 배포하지 않는다는 생각을 가지고 있어서 이부분도 필요가 없기는 합니다
-            bool
-        )
-    {
-        // 서버는 토큰을 가지고 있지 않음
-        // 그러기 떄문에 msg.sender를 사용하면 서버 자체는 토큰이 없고 오로지 지급하는 용도이기 때문에
-        // 오류가 발생
-        // 만약 단순히 gold양을 옮기는 작업하실꺼면 address인자를 두개를 받아서 해당 값을 넣어주어야함
-        _transfer(msg.sender, recipient, amount);
-        emit Transfer(msg.sender, recipient, amount);
-        return true;
-    }
-
-    function _transfer(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) internal {
-        require(sender != address(0), "ERC20: transfer from the zero address");
-        require(recipient != address(0), "ERC20: transfer to the zero address");
-        require(
-            _GoldBalances[sender] >= amount,
-            "ERC20: transfer amount exceeds balance"
-        );
-        _GoldBalances[sender] -= amount;
-        _GoldBalances[recipient] += amount;
     }
 }

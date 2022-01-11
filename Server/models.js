@@ -17,19 +17,19 @@ const UserSchema = mongoose.Schema({
 
 export const UserDB = mongoose.model("User", UserSchema);
 
-const CharacterSchema = mongoose.Schema({
-  address: String,
-  Soldier: {
+const ItemSchema = mongoose.Schema({
+  reload: Boolean,
+  id: Number,
+  name: String,
+  grade: String,
+  src: String,
+  pow: {
     type: Number,
-    default: 500,
-  },
-  limit: {
-    type: Number,
-    default: 500,
+    default: 0,
   },
 });
 
-export const CharacterDB = mongoose.model("Character", CharacterSchema);
+export const ItemDB = mongoose.model("Item", ItemSchema);
 
 const MapSchema = mongoose.Schema({
   reload: Boolean,
@@ -39,6 +39,10 @@ const MapSchema = mongoose.Schema({
   topography: String,
   GiveToken: String,
   src: String,
+  force: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export const MapDB = mongoose.model("Map", MapSchema);

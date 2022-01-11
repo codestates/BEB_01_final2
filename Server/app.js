@@ -6,9 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import User from "./routers/User.js";
-import CharacterRouter from "./routers/CharacterRouter.js";
+import ItemRouter from "./routers/ItemRouter.js";
 import MapRouter from "./routers/MapRouter.js";
 import { SetMapData } from "./SetMapData.js";
+import { setItemData } from "./SetItemData.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({ extends: true }));
 app.use(cors());
 
 app.use("/", User);
-app.use("/Character", CharacterRouter);
+app.use("/Item", ItemRouter);
 app.use("/Map", MapRouter);
 
 mongoose
@@ -32,6 +33,7 @@ mongoose
       });
 
       SetMapData();
+      setItemData();
     } else {
       console.error(err);
     }
