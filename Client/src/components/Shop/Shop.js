@@ -74,8 +74,9 @@ function Shop() {
           <div className="Shop_list"> Token recharge</div>
 
           <div className="Shop_list">Item probability table</div>
-
-          <div className="Shop_list">Item list</div>
+          <Link to="/ItemList">
+            <div className="Shop_list">Item list</div>
+          </Link>
 
           <Link to="/MyPage">
             <div className="Shop_list">My Item</div>

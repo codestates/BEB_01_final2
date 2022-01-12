@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { makeShortAddress } from "../../utils/function/function";
 function CryptoWorld() {
   const [data, SetData] = useState(false);
-  console.log(makeShortAddress);
   useEffect(() => {
     const getData = async () => {
       await axios

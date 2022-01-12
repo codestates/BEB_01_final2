@@ -24,12 +24,15 @@ function DetailWorld({ player }) {
       alert("1명 이상의 병력으로 공격하세요!");
     } else if (data.owner === player.address) {
       alert("자기 자신을 공격할수는 없습니다");
+    } else if (player === false) {
+      alert("로그인 해주세요!");
     } else {
       await axios
         .post("http://localhost:8080/Map/updateMap", {
           idx: idx[0],
           AttackAddress: player.address,
           soldier: soldier,
+          owner: data.owner,
         })
         .then((result) => {
           alert(result.data.message);

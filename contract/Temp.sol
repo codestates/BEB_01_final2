@@ -3,22 +3,41 @@ pragma solidity 0.8.10;
 import "./libraries/Token.sol";
 import "./libraries/NFT.sol";
 
-contract Temp is Token("gold", "GOLD"), NFT("item", "ITM") {
-    constructor() {}
+contract Temp is NFT("item", "ITM"){
 
-    function name() public view override(Token, NFT) returns (string memory) {
-        return Token.name();
+    Token private gold;
+
+    constructor(address token) {
+        gold = Token(token);
+    }
+    
+    function goldTotalSupply() public view returns(uint256){
+        return gold.totalSupply();
+    }
+    
+    function goldBalanceOf(address account) public view returns (uint256) {
+        return gold.balanceOf(account);
     }
 
-    function symbol() public view override(Token, NFT) returns (string memory) {
-        return Token.symbol();
+    function goldCheck(address account) public view returns(bool){
+        return gold.check(account);
     }
 
-    function NFTname() public view returns (string memory) {
-        return super.name();
+    function goldMint(address to, uint256 amount) public{
+        gold.mintGold(amount, to);
     }
 
-    function NFTsymbol() public view returns (string memory) {
-        return super.symbol();
+    function goldTransfer(address from, address to, uint256 amount)public {
+        gold.transfer(from, to, amount);
     }
+
+    function goldBurn(address account, uint256 amount) public{
+        gold.burn(account, amount);
+    }
+    function goldMintAll(address[] memory accounts){
+        
+    }
+
+
+
 }

@@ -5,8 +5,8 @@ import {
   topography,
   src,
   giveToken,
-} from "./Datadummy/MapData.js";
-import { MapDB } from "./models.js";
+} from "../Datadummy/MapData.js";
+import { MapDB } from "../models.js";
 
 export const SetMapData = async () => {
   let ch = await MapDB.find({ reload: false });

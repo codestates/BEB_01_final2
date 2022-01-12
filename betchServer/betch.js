@@ -3,13 +3,9 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import schedule from "node-schedule";
+import { giveTokenBlockChain } from "./giveToken.js";
 dotenv.config();
-
-import User from "./routers/User.js";
-import ItemRouter from "./routers/ItemRouter.js";
-import MapRouter from "./routers/MapRouter.js";
-import { SetMapData } from "./functions/SetMapData.js";
-import { setItemData } from "./functions/SetItemData.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -20,20 +16,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extends: true }));
 app.use(cors());
 
-app.use("/", User);
-app.use("/Item", ItemRouter);
-app.use("/Map", MapRouter);
+const rule = new schedule.RecurrenceRule();
+rule.second = 30;
+
+schedule.scheduleJob(rule, () => {
+  giveTokenBlockChain();
+});
 
 mongoose
   .connect(URL)
   .then((result, err) => {
     if (!err) {
       app.listen(PORT, (req, res) => {
-        console.log(`DB는 mongoose, PORT 번호는 ${PORT}`);
+        console.log(`배치서버!! ${PORT}`);
       });
-
-      SetMapData();
-      setItemData();
     } else {
       console.error(err);
     }

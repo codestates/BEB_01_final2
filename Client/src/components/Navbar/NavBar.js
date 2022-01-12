@@ -23,11 +23,12 @@ function NavBar({ address, user, openlogin }) {
     rule.second = 10;
 
     const job = () =>
-      schedule.scheduleJob(rule, () => {
-        // 이러면 10초가 될때마다 함수가 실행됨
-        // === 1분 간격으로 함수가 실행된다.
-        // 테스트에 용이하기위해서 1분간격으로 설정
-        axios.get("http://localhost:8080/Map/GiveToken");
+      schedule.scheduleJob(rule, async () => {
+        // await axios
+        //   .get("http://localhost:8080/Map/GiveToken")
+        //   .then((result) => {
+        //     console.log(result.data.message);
+        //   });
       });
 
     if (ch === false) {

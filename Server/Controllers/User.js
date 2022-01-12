@@ -14,23 +14,21 @@ export const makeUser = async (req, res) => {
   if (IdCh.length !== 0) {
     res.status(200).send({ message: "아이디 중복!" });
   } else {
-    const answer = web3();
-    answer.then(async (web3) => {
-      const account = await web3.eth.accounts.create();
+    const answer = web3;
+    const account = await web3.eth.accounts.create();
 
-      const makeUser = await new UserDB({
-        ID: ID,
-        password: password,
-        address: account.address,
-        privateKey: account.privateKey,
-      });
-      makeUser.save();
+    const makeUser = await new UserDB({
+      ID: ID,
+      password: password,
+      address: account.address,
+      privateKey: account.privateKey,
+    });
+    makeUser.save();
 
-      // 컨트랙트를 통해서 캐릭터를 바로 만들어 주어야함
-      res.status(200).send({
-        message: "아이디 생성 완료!",
-        User: makeUser,
-      });
+    // 컨트랙트를 통해서 캐릭터를 바로 만들어 주어야함
+    res.status(200).send({
+      message: "아이디 생성 완료!",
+      User: makeUser,
     });
   }
 };
@@ -66,6 +64,8 @@ export const vefiry = async (req, res) => {
   const sendData = {
     address: User.address,
     HavingLands: User.HavingLands,
+    Soldier: User.Soldier,
+    Token: User.Token,
   };
 
   res.status(200).send(sendData);

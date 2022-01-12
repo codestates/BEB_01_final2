@@ -2,23 +2,21 @@
 pragma solidity 0.8.10;
 
 import "./ERC165.sol";
-import "./Strings.sol";
+import "./utils/Strings.sol";
+import "./Token.sol";
 
 interface IERC721 is IERC165 {
-    function NFTbalanceOf(address owner)
-        external
-        view
-        returns (uint256 balance);
+    function balanceOf(address owner) external view returns (uint256 balance);
 
     function ownerOf(uint256 tokenId) external view returns (address owner);
 
-    function nftTransferFrom(
+    function transferFrom(
         address from,
         address to,
         uint256 tokenId
-    ) external;
+    ) external returns (bool);
 
-    function nftApprove(address to, uint256 tokenId) external returns (bool);
+    function approve(address to, uint256 tokenId) external returns (bool);
 
     function getApproved(uint256 tokenId)
         external
@@ -32,17 +30,17 @@ interface IERC721 is IERC165 {
         view
         returns (bool);
 
-    event nftTransfer(
+    event Transfer(
         address indexed from,
         address indexed to,
         uint256 indexed tokenId
     );
-    event nftApproval(
+    event Approval(
         address indexed owner,
         address indexed approved,
         uint256 indexed tokenId
     );
-    event nftApprovalForAll(
+    event ApprovalForAll(
         address indexed owner,
         address indexed operator,
         bool approved
@@ -77,7 +75,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         _symbol = symbol_;
     }
 
-    function mintNFT(address to, string memory URI) external returns (uint256) {
+    function mintNFT(address to, string memory URI) public returns (uint256) {
         _nftId++;
         _TotalNFTAmount++;
         uint256 newId = _nftId;
@@ -94,7 +92,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         _balances[to] += 1;
         _owners[tokenId] = to;
 
-        emit nftTransfer(address(0), to, tokenId);
+        emit Transfer(address(0), to, tokenId);
     }
 
     function _setTokenURI(uint256 tokenId, string memory _tokenURI)
@@ -117,7 +115,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         view
         returns (string[] memory)
     {
-        string[] memory NFTList = new string[](NFTbalanceOf(_address));
+        string[] memory NFTList = new string[](balanceOf(_address));
         uint256 idx = 0;
         for (uint256 i = 1; i < getTotalNFTAmount() + 1; i++) {
             if (ownerOf(i) == _address) {
@@ -132,17 +130,18 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         return _TotalNFTAmount;
     }
 
-    function nftTransferFrom(
+    function transferFrom(
         address from,
         address to,
         uint256 tokenId
-    ) public virtual override {
+    ) public virtual override returns (bool) {
         require(
             _isApprovedOrOwner(from, tokenId),
             "ERC721: transfer caller is not owner nor approved"
         );
 
-        _nftTransfer(from, to, tokenId);
+        _Transfer(from, to, tokenId);
+        return true;
     }
 
     function _isApprovedOrOwner(address spender, uint256 tokenId)
@@ -161,7 +160,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
             isApprovedForAll(owner, spender));
     }
 
-    function _nftTransfer(
+    function _Transfer(
         address from,
         address to,
         uint256 tokenId
@@ -178,7 +177,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         _balances[to] += 1;
         _owners[tokenId] = to;
 
-        emit nftTransfer(from, to, tokenId);
+        emit Transfer(from, to, tokenId);
     }
 
     function supportsInterface(bytes4 interfaceId)
@@ -194,7 +193,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
             super.supportsInterface(interfaceId);
     }
 
-    function NFTbalanceOf(address owner)
+    function balanceOf(address owner)
         public
         view
         virtual
@@ -281,7 +280,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         return _operatorApprovals[owner][operator];
     }
 
-    function nftApprove(address to, uint256 tokenId)
+    function approve(address to, uint256 tokenId)
         external
         virtual
         override
@@ -305,7 +304,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
 
     function _approve(address to, uint256 tokenId) internal virtual {
         _tokenApprovals[tokenId] = to;
-        emit nftApproval(NFT.ownerOf(tokenId), to, tokenId);
+        emit Approval(NFT.ownerOf(tokenId), to, tokenId);
     }
 
     function _setApprovalForAll(
@@ -315,7 +314,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
     ) internal virtual {
         require(owner != operator, "ERC721: approve to caller");
         _operatorApprovals[owner][operator] = approved;
-        emit nftApprovalForAll(owner, operator, approved);
+        emit ApprovalForAll(owner, operator, approved);
     }
 
     function _burn(uint256 tokenId) internal virtual {
@@ -326,6 +325,6 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         _balances[owner] -= 1;
         delete _owners[tokenId];
 
-        emit nftTransfer(owner, address(0), tokenId);
+        emit Transfer(owner, address(0), tokenId);
     }
 }

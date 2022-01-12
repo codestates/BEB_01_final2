@@ -14,3 +14,5 @@ export { default as Login } from "./Login/Login";
 
 export { default as SignIn } from "./SignIn/SignIn";
 export { default as NFTList } from "./NFTList/NFTList";
+
+export { default as ItemList } from "./ItemList/ItemList";

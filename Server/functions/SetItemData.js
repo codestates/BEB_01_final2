@@ -1,5 +1,5 @@
-import { name, grade, src } from "./Datadummy/ItemData.js";
-import { ItemDB } from "./models.js";
+import { name, grade, src } from "../Datadummy/ItemData.js";
+import { ItemDB } from "../models.js";
 
 export const setItemData = async () => {
   let ch = await ItemDB.find({ reload: false });

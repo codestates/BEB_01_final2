@@ -4,6 +4,7 @@ import "./MyPage.scss";
 import { NFTList } from "../main";
 
 function MyPage({ player }) {
+  console.log(player);
   return (
     <>
       <div className="MyPage_App">
@@ -16,6 +17,7 @@ function MyPage({ player }) {
           <div>주소 : {player.address}</div>
           <div>PoW : solidity로 가져와야함;;</div>
           <div>병력수 : {player.Soldier}</div>
+          <div>Token : {player.Token}</div>
         </div>
       </div>
       <div className="Status_app">

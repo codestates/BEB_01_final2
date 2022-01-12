@@ -9,6 +9,7 @@ import {
   Shop,
   Login,
   SignIn,
+  ItemList,
 } from "./components/main";
 import { useEffect, useState } from "react";
 
@@ -104,6 +105,9 @@ function App() {
         </Route>
         <Route path="/SignIn">
           <SignIn />
+        </Route>
+        <Route path="/ItemList">
+          <ItemList />
         </Route>
       </Switch>
     </div>
