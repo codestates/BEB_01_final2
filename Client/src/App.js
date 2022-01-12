@@ -10,6 +10,7 @@ import {
   Login,
   SignIn,
   ItemList,
+  Popup,
 } from "./components/main";
 import { useEffect, useState } from "react";
 
@@ -87,6 +88,11 @@ function App() {
         <Route path="/Shop">
           <Shop />
         </Route>
+
+        <Route path="/Popup">
+          <Popup />
+        </Route>
+
         <Route path="/Login">
           <Login
             SetUser={SetUser}

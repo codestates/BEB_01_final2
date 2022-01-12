@@ -16,3 +16,4 @@ export { default as SignIn } from "./SignIn/SignIn";
 export { default as NFTList } from "./NFTList/NFTList";
 
 export { default as ItemList } from "./ItemList/ItemList";
+export { default as Popup } from "./Popup/Popup";
