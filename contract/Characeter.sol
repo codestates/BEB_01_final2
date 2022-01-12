@@ -1,11 +1,48 @@
-//SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
-
-import "./libraries/NFT.sol";
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity 0.8.10;
 import "./libraries/Token.sol";
+import "./libraries/NFT.sol";
 
-contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
-    Token gold;
+contract Character is NFT("item", "ITM") {
+    Token private gold;
+    uint256 PowFee = 30;
+    uint256 limitFee = 50;
+
+    constructor(address token) {
+        gold = Token(token);
+    }
+
+    function goldTotalSupply() public view returns (uint256) {
+        return gold.totalSupply();
+    }
+
+    function goldBalanceOf(address account) public view returns (uint256) {
+        return gold.balanceOf(account);
+    }
+
+    function goldCheck(address account) public view returns (bool) {
+        return gold.check(account);
+    }
+
+    function goldMint(address to, uint256 amount) public {
+        gold.mintGold(amount, to);
+    }
+
+    function goldTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) public {
+        gold.transfer(from, to, amount);
+    }
+
+    function goldBurn(address account, uint256 amount) public {
+        gold.burn(account, amount);
+    }
+
+    function mintAll(address[] memory account, uint256 amount) public {
+        gold.mintGoldAll(account, amount);
+    }
 
     modifier isOwner(address _address) {
         require(checkUser[_address] == true);
@@ -18,9 +55,9 @@ contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
     );
 
     mapping(address => bool) private checkUser;
-    mapping(address => Character) private _Character;
+    mapping(address => Characters) private _Character;
 
-    struct Character {
+    struct Characters {
         uint32 Pow;
         uint32 limit;
     }
@@ -28,23 +65,29 @@ contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
     function makeCharacter(address _address) public returns (bool) {
         require(checkUser[_address] == false);
         checkUser[_address] = true;
-        Character storage character = _Character[_address];
-        character.Pow = 300;
+        Characters storage character = _Character[_address];
+        character.Pow = 1;
         character.limit = 300;
 
         emit NewUser(_address, character.Pow, character.limit);
-
         return true;
     }
 
     function IncreaseLimit(address _address) public isOwner(_address) {
-        Character storage character = _Character[_address];
+        require(goldBalanceOf(_address) >= limitFee);
+        goldBurn(_address, limitFee);
+
+        Characters storage character = _Character[_address];
         character.limit += 300;
     }
 
     function IncreasePow(address _address) public isOwner(_address) {
-        Character storage character = _Character[_address];
-        character.Pow += 300;
+        require(goldBalanceOf(_address) >= PowFee);
+        goldBurn(_address, PowFee);
+
+        Characters storage character = _Character[_address];
+        uint32 number = uint32(getStatus());
+        character.Pow += number;
     }
 
     function getPow(address _address)
@@ -53,7 +96,7 @@ contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
         isOwner(_address)
         returns (uint32)
     {
-        Character storage character = _Character[_address];
+        Characters storage character = _Character[_address];
         return character.Pow;
     }
 
@@ -63,7 +106,7 @@ contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
         isOwner(_address)
         returns (uint32)
     {
-        Character storage character = _Character[_address];
+        Characters storage character = _Character[_address];
         return character.limit;
     }
 
@@ -71,14 +114,17 @@ contract normalCharacter is NFT("TEST", "TEST_NFT"), Token("gold", "GOLD") {
         public
         view
         isOwner(_address)
-        returns (Character memory)
+        returns (Characters memory)
     {
         return _Character[_address];
     }
 
-    function setToken(address tokenAddress) public returns (bool) {
-        require(tokenAddress != address(0x0));
-        gold = Token(tokenAddress);
-        return true;
+    function getRandomNumber() internal view returns (uint256) {
+        uint256 total = goldTotalSupply();
+        return uint256(keccak256(abi.encodePacked(msg.sender, total))) % 100;
+    }
+
+    function getStatus() public view returns (uint256) {
+        return getRandomNumber() % 10;
     }
 }

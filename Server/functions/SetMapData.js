@@ -24,7 +24,5 @@ export const SetMapData = async () => {
       SetData.save();
     }
     console.log("MapData 초기화 완료!");
-  } else {
-    console.log("MapData 존재함!");
   }
 };

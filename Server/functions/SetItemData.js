@@ -15,7 +15,5 @@ export const setItemData = async () => {
       SetItem.save();
     }
     console.log("item데이터 생성!");
-  } else {
-    console.log("item데이터 이미 존재!");
   }
 };

@@ -20,15 +20,15 @@ function NavBar({ address, user, openlogin }) {
     });
 
     const rule = new schedule.RecurrenceRule();
-    rule.second = 10;
+    rule.minute = 10;
 
     const job = () =>
       schedule.scheduleJob(rule, async () => {
-        // await axios
-        //   .get("http://localhost:8080/Map/GiveToken")
-        //   .then((result) => {
-        //     console.log(result.data.message);
-        //   });
+        await axios
+          .get("http://localhost:8080/Map/GiveToken")
+          .then((result) => {
+            console.log(result.data.message);
+          });
       });
 
     if (ch === false) {

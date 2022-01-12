@@ -1,6 +1,6 @@
 import { giveTokenDB } from "../functions/giveToken.js";
 import { MapDB, TokenDB, UserDB } from "../models.js";
-import { TokenContract, web3 } from "../web3/web3.js";
+import { mintTokenArray, TokenContract, web3 } from "../web3/web3.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -67,29 +67,8 @@ export const GiveToken = async (req, res) => {
     for (let i = 0; i < answer.length; i++) {
       giveTokenDB(answer[i]);
     }
+    mintTokenArray(answer);
 
-    TokenContract().then(async (method) => {
-      let nonce = await web3.eth.getTransactionCount(
-        process.env.Server_Address
-      );
-      console.log(nonce);
-      // let tx = {
-      //   from: process.env.Server_Address,
-      //   to: process.env.Token_CA,
-      //   nonce: nonce,
-      //   gas: 500000,
-      //   data: method.goldMintAll(answer, 20).encodeABI(),
-      // };
-      // await web3.eth.accounts
-      //   .signTransaction(tx, process.env.Server_PrivateKey)
-      //   .then(async (Tx) => {
-      //     const makeTokenDB = await new TokenDB({
-      //       To_Array: answer,
-      //       hash: Tx.rawTransaction,
-      //     });
-      //     makeTokenDB.save();
-      // });
-    });
     console.log("TokenDB update");
     res.status(200).send({ message: "Token지급 완료!" });
   } else {

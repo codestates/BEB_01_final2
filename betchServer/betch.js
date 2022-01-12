@@ -17,11 +17,13 @@ app.use(bodyParser.urlencoded({ extends: true }));
 app.use(cors());
 
 const rule = new schedule.RecurrenceRule();
-rule.second = 30;
+rule.minute = 30;
 
-schedule.scheduleJob(rule, () => {
+app.get("/", (req, res) => {
   giveTokenBlockChain();
 });
+
+schedule.scheduleJob(rule, () => {});
 
 mongoose
   .connect(URL)
