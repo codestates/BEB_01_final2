@@ -10,16 +10,34 @@ const UserSchema = mongoose.Schema({
     default: [],
   },
   Soldier: {
-    type: Number,
-    default: 500,
+    type: Object,
+    default: 300,
   },
   Token: {
     type: Number,
     default: 0,
   },
+  NFTList: {
+    type: [Object],
+    default: [],
+  },
 });
 
 export const UserDB = mongoose.model("User", UserSchema);
+
+const CharacterSchema = mongoose.Schema({
+  address: String,
+  Pow: {
+    type: Number,
+    default: 1,
+  },
+  limit: {
+    type: Number,
+    default: 300,
+  },
+});
+
+export const CharacetrDB = mongoose.model("Character", CharacterSchema);
 
 const ItemSchema = mongoose.Schema({
   reload: Boolean,
@@ -56,12 +74,16 @@ const TokenSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  To: String,
   To_Array: {
     type: [String],
     default: [],
   },
-  hash: String,
+  messageHash: String,
+  v: String,
+  r: String,
+  s: String,
+  rawTransaction: String,
+  transactionHash: String,
 });
 
 export const TokenDB = mongoose.model("Token", TokenSchema);

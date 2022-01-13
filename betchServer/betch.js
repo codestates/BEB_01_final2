@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import schedule from "node-schedule";
 import { giveTokenBlockChain } from "./giveToken.js";
+
 dotenv.config();
 
 const app = express();
@@ -23,7 +24,9 @@ app.get("/", (req, res) => {
   giveTokenBlockChain();
 });
 
-schedule.scheduleJob(rule, () => {});
+schedule.scheduleJob(rule, () => {
+  giveTokenBlockChain();
+});
 
 mongoose
   .connect(URL)

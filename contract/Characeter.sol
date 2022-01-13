@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.10;
-import "./libraries/Token.sol";
-import "./libraries/NFT.sol";
+import "./Token.sol";
+import "./NFT.sol";
 
 contract Character is NFT("item", "ITM") {
     Token private gold;
@@ -127,4 +127,6 @@ contract Character is NFT("item", "ITM") {
     function getStatus() public view returns (uint256) {
         return getRandomNumber() % 10;
     }
+
+    // 0xa241D7B42dc1B6DbC561EF98a5129D2f1155bfFe
 }

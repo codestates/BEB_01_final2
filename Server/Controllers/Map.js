@@ -1,7 +1,12 @@
 import { giveTokenDB } from "../functions/giveToken.js";
-import { MapDB, TokenDB, UserDB } from "../models.js";
-import { mintTokenArray, TokenContract, web3 } from "../web3/web3.js";
+import { CharacetrDB, MapDB, TokenDB, UserDB } from "../models.js";
+import {
+  MakeRandomNumber_Using_web3,
+  mintToken,
+  mintTokenArray,
+} from "../web3/web3.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 export const AllMap = async (req, res) => {
@@ -22,6 +27,7 @@ export const updateMap = async (req, res) => {
   const AttackAddress = req.body.AttackAddress;
   const soldier = req.body.soldier;
   const beforeOwner = req.body.owner;
+  const defense_owner = req.body.defense_owner;
   const temp = await MapDB.findOne({ idx: idx });
 
   if (beforeOwner === "none") {
@@ -41,16 +47,77 @@ export const updateMap = async (req, res) => {
     );
     res.status(200).send({ message: "주인이 없는 땅이기에 바로 차지합니다!" });
   } else {
-    console.log("주인이 있는 땅을 의미");
-    const beforeSoldier = temp.force;
-    // 기존 병력은 불러왔고
-    // 그러면 기존 병력과 주인의 캐릭터 수치를 합쳐서
+    const defense_Character = await CharacetrDB.findOne({
+      address: beforeOwner,
+    });
+    const Attacker_Character = await CharacetrDB.findOne({
+      address: AttackAddress,
+    });
+    const Attacker_User = await UserDB.findOne({ address: AttackAddress });
 
-    // 들어오는 값과 비교를 하여 승부를 결정 짓으면 됨
-    const beforeOwner = await UserDB.findOne({ address: beforeOwner });
+    const defense_User = await UserDB.findOne({ address: beforeOwner });
 
-    // 주인이 있을시에 처리해야하는 로직을 작성해야함
-    // solidity코드를 통해서 character부분도 불러와야 하기 떄문에 후에 작성
+    const random_number = (await MakeRandomNumber_Using_web3()) / 10;
+
+    const Want_Attack_Soldier = req.body.soldier;
+
+    const Map_defense_force = defense_Character.Pow * random_number;
+    const Map_defense_Soldier = temp.force;
+
+    const Attacker_Pow = Attacker_Character.Pow * random_number;
+    const Attacker_having_Soldier = Attacker_User.Soldier;
+
+    if (Want_Attack_Soldier > Attacker_having_Soldier) {
+      res.status(200).send({ message: "그만큼의 병력이 없습니다...ㅠ" });
+    }
+
+    const total_Attack_Power = Attacker_Pow * Want_Attack_Soldier;
+    const total_defense_Power = Map_defense_force * Map_defense_Soldier;
+
+    if (total_Attack_Power >= total_defense_Power) {
+      // 공격자가 이겼다는 의미
+      // 공격자 DB업데이트
+      const Attacker_update = await UserDB.findOneAndUpdate(
+        { address: AttackAddress },
+        {
+          Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
+          HavingLands: [...Attacker_User.HavingLands, temp.MapName],
+          Token: Attacker_User.Token + temp.GiveToken,
+        },
+        {
+          new: true,
+        }
+      );
+      const Map_update = await MapDB.findOneAndUpdate(
+        { idx: idx },
+        { owner: AttackAddress, force: Want_Attack_Soldier },
+        { new: true }
+      );
+      mintToken(AttackAddress, temp.GiveToken);
+      res.status(200).send({ message: "공격자 승리!!!!" });
+    } else {
+      // 수비자가 이겼다는 의미
+      const Attacker_update = await UserDB.findOneAndUpdate(
+        { address: AttackAddress },
+        {
+          Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
+        },
+        {
+          new: true,
+        }
+      );
+      const defense_update = await UserDB.findOneAndUpdate(
+        { address: beforeOwner },
+        {
+          Token: defense_User + temp.GiveToken,
+        },
+        { new: true }
+      );
+      mintToken(beforeOwner, temp.GiveToken);
+      res.status(200).send({ message: "방어자 승리!!!!" });
+    }
+    // 캐릭터 pow에 소수점에 부여되는 random_number을 곱한뒤
+    // 해당 값을 병력에 곱하여 서로 비교를 한다.
   }
 };
 
@@ -74,4 +141,10 @@ export const GiveToken = async (req, res) => {
   } else {
     res.status(200).send({ message: "점령한 사람이 없습니다..ㅠ" });
   }
+};
+
+export const defense_owner = async (req, res) => {
+  const address = req.body.address;
+  const defense_Character = await CharacetrDB.findOne({ address: address });
+  res.status(200).send({ data: defense_Character });
 };

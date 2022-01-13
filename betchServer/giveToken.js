@@ -1,23 +1,34 @@
 import { TokenDB } from "./models.js";
-import { web3 } from "../Server/web3/web3.js";
+import Web3 from "web3";
+import dotenv from "dotenv";
+dotenv.config();
 
-export const giveTokenBlockChain = async () => {
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.infuraURL));
+
+export const giveTokenBlockChain = async (req, res) => {
   const answer = await TokenDB.find({ check: false });
+
   if (answer.length > 0) {
+    console.log(" ========== BlockChain기록 시작!===========");
     for (let i = 0; i < answer.length; i++) {
-      let Tx = answer[i].hash;
-      let idx = answer[i].id;
-      await web3.eth.sendSignedTransaction(Tx, (err, hash) => {
-        if (err) console.log(err);
-      });
+      await web3.eth.sendSignedTransaction(
+        answer[i].rawTransaction,
+        (err, hash) => {
+          if (err) console.log(err);
+          else console.log(hash);
+        }
+      );
       await TokenDB.findOneAndUpdate(
-        { id: idx },
+        { _id: answer[i].id },
         {
           check: true,
+        },
+        {
+          new: true,
         }
       );
     }
-    console.log("BlockChain토큰 지급 완료!");
+    console.log(" =========== BlockChain기록 완료 =========");
   } else {
     console.log("지급할 데이터가 없음!");
   }

@@ -74,7 +74,9 @@ contract Token is TokenInterface {
     function mintGoldAll(address[] memory _to, uint256 amount) public {
         string[] memory _address = new string[](_to.length);
         for (uint256 i = 0; i < _address.length; i++) {
-            mintGold(amount, _to[i]);
+            _balances[_to[i]] += amount;
+            _check[_to[i]] = true;
+            _totalSupply += amount;
         }
     }
 

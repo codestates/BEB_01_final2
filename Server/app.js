@@ -10,10 +10,25 @@ import ItemRouter from "./routers/ItemRouter.js";
 import MapRouter from "./routers/MapRouter.js";
 import { SetMapData } from "./functions/SetMapData.js";
 import { setItemData } from "./functions/SetItemData.js";
+import { web3 } from "./web3/web3.js";
 
 const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.URL;
+export let nonce;
+
+const getnonce = async () => {
+  const firstNonce = await web3.eth.getTransactionCount(
+    process.env.Server_Address
+  );
+  nonce = firstNonce;
+  console.log("account의 nonce값 = " + nonce);
+};
+
+export const plusnonce = async () => {
+  nonce++;
+  console.log(nonce);
+};
 
 app.use(express.static("public"));
 app.use(bodyParser.json());
@@ -31,7 +46,7 @@ mongoose
       app.listen(PORT, (req, res) => {
         console.log(`DB는 mongoose, PORT 번호는 ${PORT}`);
       });
-
+      setTimeout(getnonce, 1000);
       SetMapData();
       setItemData();
     } else {

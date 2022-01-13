@@ -1,15 +1,31 @@
 import React from "react";
+
 import "./NFTList.scss";
-function NFTList() {
+function NFTList({ NFTData }) {
+  console.log(NFTData);
   return (
-    <div className="NFTList">
-      <div className="NFTList_app">
-        <div className=""> img</div>
-        <div>name</div>
-        <div>등급 : A</div>
-        <div>pow : 50</div>
-      </div>
-    </div>
+    <>
+      {NFTData === false ? (
+        ""
+      ) : (
+        <>
+          {NFTData.map((NFT, idx) => {
+            return (
+              <div className="NFTList" key={idx}>
+                <div className="NFTList_app">
+                  <div className="NFT_img">
+                    <img src={NFT.src} />
+                  </div>
+                  <div className="NFT_name">{NFT.name}</div>
+                  <div className="NFT_grade">등급 : {NFT.grade}</div>
+                  <div className="NFT_pow">pow : {NFT.pow}</div>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      )}
+    </>
   );
 }
 

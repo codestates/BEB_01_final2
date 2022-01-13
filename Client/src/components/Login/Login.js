@@ -47,6 +47,7 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
 
   return (
     <div className="Login_box">
+      <img src="./img/로그인 배경화면.jpeg" className="background_img" />
       <div className="Login_container">
         <div>아이디</div>
         <input type="text" onChange={IdChange} placeholder="Write Your ID" />
@@ -56,14 +57,16 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
           onChange={passwordChange}
           placeholder="Write Your Password"
         />
-        <button onClick={Login}>로그인</button>
+        <div className="login_button">
+          <button onClick={Login}>로그인</button>
 
-        <button className="Google_button" onClick={onLoginGoogle}>
-          Google_Login
-        </button>
+          <button className="Google_button" onClick={onLoginGoogle}>
+            Google_Login
+          </button>
+        </div>
 
         <Link to="/SignIn">
-          <button className="signin">아이디가 없으신가요..??</button>
+          <button className="signin">회원가입</button>
         </Link>
       </div>
     </div>

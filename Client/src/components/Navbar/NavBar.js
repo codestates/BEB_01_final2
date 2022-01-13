@@ -20,7 +20,7 @@ function NavBar({ address, user, openlogin }) {
     });
 
     const rule = new schedule.RecurrenceRule();
-    rule.minute = 10;
+    rule.minute = 1;
 
     const job = () =>
       schedule.scheduleJob(rule, async () => {

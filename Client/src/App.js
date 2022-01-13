@@ -86,7 +86,7 @@ function App() {
           <Homepage />
         </Route>
         <Route path="/Shop">
-          <Shop />
+          <Shop player={player} />
         </Route>
 
         <Route path="/Popup">

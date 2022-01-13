@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./DetailWorld.scss";
 import axios from "axios";
+
 function DetailWorld({ player }) {
   const idx = useState(window.location.pathname.split(":")[1]);
   const [data, SetData] = useState(false);
+  const [defense_owner, Set_Defense_owner] = useState(false);
   const [soldier, SetSoldier] = useState(false);
+  const [data_ch, Set_Data_ch] = useState(false);
 
   const changeSoldier = async (e) => {
     SetSoldier(e.target.value);
@@ -14,10 +17,27 @@ function DetailWorld({ player }) {
     const getData = async () => {
       await axios
         .get(`http://localhost:8080/Map/detail/${idx[0]}`)
-        .then((result) => SetData(result.data[0]));
+        .then((result) => {
+          SetData(result.data[0]);
+          Set_Data_ch(true);
+        });
+    };
+
+    const getCharacter_force = async () => {
+      await axios
+        .post("http://localhost:8080/Map/defense_owner", {
+          address: data.owner,
+        })
+        .then((result) => {
+          console.log(result);
+          Set_Defense_owner(result.data.data);
+        });
     };
     getData();
-  }, []);
+    if (data_ch !== false && data.owner !== "none") {
+      getCharacter_force();
+    }
+  }, [data_ch]);
 
   const get = async () => {
     if (soldier === false) {
@@ -26,6 +46,7 @@ function DetailWorld({ player }) {
       alert("자기 자신을 공격할수는 없습니다");
     } else if (player === false) {
       alert("로그인 해주세요!");
+      window.location.replace("http://localhost:3000/Login");
     } else {
       await axios
         .post("http://localhost:8080/Map/updateMap", {
@@ -33,6 +54,7 @@ function DetailWorld({ player }) {
           AttackAddress: player.address,
           soldier: soldier,
           owner: data.owner,
+          defense_owner: defense_owner,
         })
         .then((result) => {
           alert(result.data.message);
@@ -51,13 +73,19 @@ function DetailWorld({ player }) {
         />
       ) : (
         <div className="detail_wrap">
+          {data.owner === "none" ? (
+            <img
+              src="https://www.wallpapertip.com/wmimgs/7-75917_zelda-wallpapers8-zelda-wallpaper-4k-desktop.jpg"
+              className="img"
+            />
+          ) : (
+            <img
+              src="https://w.namu.la/s/e764cbd6426bff27978421f75aa3ebdabe3effe633b089a33def704e297a3dd6cb0305ebaa2a86bbc90921343c64ba852afb8dc4aa2f09a70a4f6664f25ac51dd241679bde05297f84f96c1a3a0ac0c6"
+              className="img"
+            />
+          )}
+
           <div className="detail_box">
-            <div className="detail_title">
-              <label>MAP</label>
-            </div>
-            {/* <div className="detail_content">
-              <img src="" alt="logo" />
-            </div> */}
             <div className="detail_state">
               <div className="state01">
                 <div>
@@ -73,18 +101,25 @@ function DetailWorld({ player }) {
                   Owner : <span>{data.owner}</span>
                 </div>
                 <div>
-                  Soldier force : <span>{data.force}</span>
+                  defense Soldier : <span>{data.force}</span>
                 </div>
                 <div>
-                  Character force : <span>여기는 web3로 불러와야 할듯</span>
+                  {defense_owner === false
+                    ? ""
+                    : "Character force : " + defense_owner.Pow}
                 </div>
               </div>
-              <div className="Attack_div">
-                <input type="text" onChange={changeSoldier} />
-                <button className="Attack_button" onClick={get}>
-                  Attack
-                </button>
-              </div>
+            </div>
+            <div className="state02">
+              <h4>My Status</h4>
+              <div> Soldier : {player.Soldier}</div>
+              <div> PoW : {player.Pow}</div>
+            </div>
+            <div className="Attack_div">
+              <input type="text" onChange={changeSoldier} />
+              <button className="Attack_button" onClick={get}>
+                Attack
+              </button>
             </div>
           </div>
         </div>

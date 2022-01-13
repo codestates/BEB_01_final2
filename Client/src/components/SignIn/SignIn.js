@@ -18,24 +18,29 @@ function SignIn() {
     SetCh(e.target.value);
   };
   const sendData = async () => {
-    if (password !== ch) {
-      alert("패스워드가 다릅니다!");
+    if (name.length !== 0 && password.length !== 0 && ch.length !== 0) {
+      if (password !== ch) {
+        alert("패스워드가 다릅니다!");
+      } else {
+        await axios
+          .post("http://localhost:8080/makeuser", {
+            ID: name,
+            password: password,
+          })
+          .then((result) => {
+            alert(result.data.message);
+            window.location.replace("http://localhost:3000/Login");
+          });
+      }
     } else {
-      await axios
-        .post("http://localhost:8080/makeuser", {
-          ID: name,
-          password: password,
-        })
-        .then((result) => {
-          alert(result.data.message);
-        });
+      alert("값을 확인해 주세요!");
     }
   };
 
   return (
     <div className="SignIn_app">
+      <img src="./img/로그인 배경화면.jpeg" className="background_img" />
       <div className="SignIn_container">
-        <div className="SignIn_title">Make Your Account</div>
         <div>아이디</div>
         <input type="text" onChange={NameChange} placeholder="Name_input" />
         <div>패스워드</div>
@@ -50,7 +55,7 @@ function SignIn() {
           onChange={PasswordCh}
           placeholder="Password_ch"
         />
-        <button onClick={sendData}>제출!</button>
+        <button onClick={sendData}>회원가입</button>
       </div>
     </div>
   );

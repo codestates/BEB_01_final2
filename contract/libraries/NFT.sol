@@ -2,7 +2,7 @@
 pragma solidity 0.8.10;
 
 import "./ERC165.sol";
-import "./utils/Strings.sol";
+import "./Strings.sol";
 import "./Token.sol";
 
 interface IERC721 is IERC165 {
@@ -110,22 +110,6 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         return _owners[tokenId] != address(0);
     }
 
-    function getNFT_Address(address _address)
-        public
-        view
-        returns (string[] memory)
-    {
-        string[] memory NFTList = new string[](balanceOf(_address));
-        uint256 idx = 0;
-        for (uint256 i = 1; i < getTotalNFTAmount() + 1; i++) {
-            if (ownerOf(i) == _address) {
-                NFTList[idx] = _tokenURIs[i];
-                idx++;
-            }
-        }
-        return NFTList;
-    }
-
     function getTotalNFTAmount() public view returns (uint256) {
         return _TotalNFTAmount;
     }
@@ -142,6 +126,10 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
 
         _Transfer(from, to, tokenId);
         return true;
+    }
+
+    function getNFT(uint256 _id) public view returns (string memory) {
+        return _tokenURIs[_id];
     }
 
     function _isApprovedOrOwner(address spender, uint256 tokenId)

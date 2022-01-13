@@ -1,5 +1,5 @@
-import { UserDB } from "../models.js";
-import { web3 } from "../web3/web3.js";
+import { CharacetrDB, UserDB } from "../models.js";
+import { web3, makeCharacter } from "../web3/web3.js";
 
 import jwt from "jsonwebtoken";
 
@@ -25,7 +25,11 @@ export const makeUser = async (req, res) => {
     });
     makeUser.save();
 
-    // 컨트랙트를 통해서 캐릭터를 바로 만들어 주어야함
+    const makeDBCharacter = await new CharacetrDB({
+      address: account.address,
+    });
+    makeDBCharacter.save();
+    makeCharacter(account.address);
     res.status(200).send({
       message: "아이디 생성 완료!",
       User: makeUser,
@@ -42,12 +46,18 @@ export const Login = async (req, res) => {
   const ID = req.body.ID;
   const password = req.body.password;
   const ch = await UserDB.find({ ID: ID, password: password });
+
   if (ch.length === 0) {
-    res.status(200).send({ message: "로그인 실패.." });
+    res.status(500).send({ message: "실패.." });
   } else {
-    const accessToken = await jwt.sign({ ID: ID }, ACCESS_SECRET, {
-      expiresIn: "1h",
-    });
+    const accessToken = await jwt.sign(
+      { ID: ID, address: ch[0].address },
+      ACCESS_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+
     res.status(200).send({ message: "로그인 성공!", Token: accessToken });
   }
 };
@@ -55,31 +65,58 @@ export const Login = async (req, res) => {
 export const vefiry = async (req, res) => {
   let temp = req.headers.authorization.split(" ")[0];
   let answer = "";
+
   for (let i = 1; i < temp.length - 1; i++) {
     answer += temp[i];
   }
+
   let data = jwt.verify(answer, ACCESS_SECRET);
 
   const User = await UserDB.findOne({ ID: data.ID });
+  const Character = await CharacetrDB.findOne({ address: data.address });
+
   const sendData = {
     address: User.address,
     HavingLands: User.HavingLands,
     Soldier: User.Soldier,
     Token: User.Token,
+    Pow: Character.Pow,
+    limit: Character.limit,
   };
 
   res.status(200).send(sendData);
 };
 
 export const vefiry_google = async (req, res) => {
-  const ch = await UserDB.findOne({ address: req.body.address });
-  if (ch === null) {
+  const User = await UserDB.findOne({ address: req.body.address });
+  const Characetr = await CharacetrDB({ address: req.body.address });
+
+  if (User === null) {
     const User = await new UserDB({ address: req.body.address });
     User.save();
 
+    const Characetr = await new CharacetrDB({ address: req.body.address });
+    Characetr.save();
+    makeCharacter(req.body.address);
     // 컨트랙트를 통해서 캐릭터를 만들어 주어야함
-    res.status(200).send({ message: "new Character", data: User });
+    const sendData = {
+      address: req.body.address,
+      HavingLands: User.HavingLands,
+      Soldier: User.Soldier,
+      Token: User.Token,
+      Pow: Characetr.Pow,
+      limit: Characetr.limit,
+    };
+    res.status(200).send({ message: "new Character", data: sendData });
   } else {
-    res.status(200).send({ message: "already User", data: ch });
+    const sendData = {
+      address: req.body.address,
+      HavingLands: User.HavingLands,
+      Soldier: User.Soldier,
+      Token: User.Token,
+      Pow: Characetr.Pow,
+      limit: Characetr.limit,
+    };
+    res.status(200).send({ message: "already User", data: sendData });
   }
 };

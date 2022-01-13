@@ -5,12 +5,16 @@ const TokenSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  To: String,
+
   To_Array: {
     type: [String],
     default: [],
   },
-  hash: String,
+  messageHash: String,
+  v: String,
+  r: String,
+  s: String,
+  rawTransaction: String,
+  transactionHash: String,
 });
-
 export const TokenDB = mongoose.model("Token", TokenSchema);
