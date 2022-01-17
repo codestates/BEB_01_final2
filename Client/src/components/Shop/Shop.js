@@ -6,25 +6,25 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Shop({ player }) {
-  console.log(player);
+  const [rouletteItem, SetrouletteItem] = useState(false);
+  const [buttonPopup, setButtonPopup] = useState(false);
+
   const generator = async () => {
     if (player.Token >= 20) {
+      setButtonPopup(true);
       const randomNum = Math.floor(Math.random() * 100 + 1);
-
       await axios
         .post("http://localhost:8080/Item/roulette", {
           address: player.address,
           random: randomNum,
         })
         .then((result) => {
-          console.log(result);
+          SetrouletteItem(result.data);
         });
     } else {
       alert("Token이 부족합니다!!");
     }
   };
-
-  const [buttonPopup, setButtonPopup] = useState(false);
 
   return (
     <div className="Shop_App">
@@ -50,19 +50,11 @@ function Shop({ player }) {
             Item draw
           </button>
           <div className="Draw_Item_popup">
-            <button
-              className="Shop_title_button "
-              onClick={generator}
-              onClick={() => setButtonPopup(true)}
-            >
-              Show My Item
-            </button>
-
-            <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-              <div>
-                <h3>My Legendary Item</h3>
-              </div>
-            </Popup>
+            <Popup
+              rouletteItem={rouletteItem}
+              buttonPopup={buttonPopup}
+              setButtonPopup={setButtonPopup}
+            ></Popup>
           </div>
         </div>
         <div className="Shop_lists">

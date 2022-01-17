@@ -89,23 +89,24 @@ export const vefiry = async (req, res) => {
 
 export const vefiry_google = async (req, res) => {
   const User = await UserDB.findOne({ address: req.body.address });
-  const Characetr = await CharacetrDB({ address: req.body.address });
 
+  const Characetr = await CharacetrDB.findOne({
+    address: req.body.address,
+  });
   if (User === null) {
     const User = await new UserDB({ address: req.body.address });
     User.save();
 
-    const Characetr = await new CharacetrDB({ address: req.body.address });
-    Characetr.save();
+    const newCharacter = await new CharacetrDB({ address: req.body.address });
+    newCharacter.save();
     makeCharacter(req.body.address);
-    // 컨트랙트를 통해서 캐릭터를 만들어 주어야함
     const sendData = {
       address: req.body.address,
       HavingLands: User.HavingLands,
       Soldier: User.Soldier,
       Token: User.Token,
-      Pow: Characetr.Pow,
-      limit: Characetr.limit,
+      Pow: newCharacter.Pow,
+      limit: newCharacter.limit,
     };
     res.status(200).send({ message: "new Character", data: sendData });
   } else {

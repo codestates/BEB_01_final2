@@ -39,6 +39,21 @@ const CharacterSchema = mongoose.Schema({
 
 export const CharacetrDB = mongoose.model("Character", CharacterSchema);
 
+const SellingSchema = mongoose.Schema({
+  id: Number,
+  seller: String,
+  buyer: {
+    type: String,
+    default: "none",
+  },
+  price: Number,
+  time: String,
+
+  item: Object,
+});
+
+export const SellingItemDB = mongoose.model("SellingItem", SellingSchema);
+
 const ItemSchema = mongoose.Schema({
   reload: Boolean,
   id: Number,

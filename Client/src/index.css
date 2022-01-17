@@ -18,3 +18,21 @@ body {
   top: 40%;
   left: 40%;
 }
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide {
+  from {
+    left: -300px;
+  }
+  to {
+    left: 100px;
+  }
+}

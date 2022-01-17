@@ -1,0 +1,62 @@
+.Selling_App {
+  position: fixed;
+  top: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 100%;
+  z-index: 9999999;
+  background-color: rgba(58, 45, 45, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .Selling_container {
+    background-color: #ca9eac;
+    border-radius: 20px;
+    box-shadow: 1px 1px 1px 1px black;
+
+    .Selling_box {
+      display: flex;
+
+      .Selling_img {
+        padding: 20px;
+        width: 200px;
+        height: 200px;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      .Selling_text {
+        padding: 20px;
+        span {
+          font-weight: 800;
+          color: black;
+        }
+      }
+    }
+    .Selling_button {
+      .Selling_input {
+        flex-direction: column;
+        span {
+          padding: 20px;
+          width: max-content;
+          font-weight: 800;
+        }
+        input {
+          width: max-content;
+        }
+      }
+      button {
+        padding: 10px;
+        background: #0c3629;
+        border-radius: 20px;
+        margin-left: 20px;
+        margin-bottom: 10px;
+        font-weight: 800;
+        color: black;
+      }
+    }
+  }
+}

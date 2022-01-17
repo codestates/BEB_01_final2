@@ -1,6 +1,7 @@
 import { randomNum } from "../functions/randomNumber.js";
 import { ItemDB, UserDB } from "../models.js";
-import { CharacterContract, getNFTLIst, mintNFT } from "../web3/web3.js";
+import { mintNFT } from "../web3/web3.js";
+import { NFT_index, plusNFT_index } from "../app.js";
 
 export const getAllItem = async (req, res) => {
   const ItemList = await ItemDB.find({});
@@ -10,16 +11,20 @@ export const getAllItem = async (req, res) => {
 export const roulette = async (req, res) => {
   const Number = req.body.random;
   const Address = req.body.address;
+
   let grade;
   if (Number < 10) {
     grade = "A";
-  } else if (10 <= Number <= 30) {
+  }
+  if (10 <= Number <= 30) {
     grade = "B";
-  } else {
+  }
+  if (Number > 30) {
     grade = "C";
   }
 
   const item = await ItemDB.find({ grade: grade });
+
   const User = await UserDB.findOne({ address: Address });
 
   const randomItem = item[randomNum(0, item.length - 1)];
@@ -31,11 +36,14 @@ export const roulette = async (req, res) => {
   } else {
     randomItem.pow = randomNum(10, 20);
   }
+  randomItem.id = NFT_index;
+  console.log(randomItem);
+  plusNFT_index();
 
   await UserDB.findOneAndUpdate(
     { address: Address },
     {
-      Token: User.Token - 20,
+      Token: User.Token - 100,
       NFTList: [...User.NFTList, randomItem],
     },
     {

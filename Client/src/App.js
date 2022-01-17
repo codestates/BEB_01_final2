@@ -11,6 +11,7 @@ import {
   SignIn,
   ItemList,
   Popup,
+  Mydeal,
 } from "./components/main";
 import { useEffect, useState } from "react";
 
@@ -27,6 +28,7 @@ function App() {
   const [privKey, SetPrivKey] = useState(false);
   const [address, SetAddress] = useState(false);
   const [player, SetPlayer] = useState(false);
+  const [NFTData, SetNFTData] = useState(false);
 
   const onMount = async () => {
     const openlogin = new OpenLogin({
@@ -101,7 +103,7 @@ function App() {
           />
         </Route>
         <Route path="/MyPage">
-          <MyPage player={player} />
+          <MyPage player={player} SetNFTData={SetNFTData} NFTData={NFTData} />
         </Route>
         <Route path="/CryptoWorld">
           <CryptoWorld />
@@ -114,6 +116,9 @@ function App() {
         </Route>
         <Route path="/ItemList">
           <ItemList />
+        </Route>
+        <Route path="/Deal">
+          <Mydeal />
         </Route>
       </Switch>
     </div>

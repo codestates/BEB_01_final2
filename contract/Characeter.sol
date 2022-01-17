@@ -81,13 +81,15 @@ contract Character is NFT("item", "ITM") {
         character.limit += 300;
     }
 
-    function IncreasePow(address _address) public isOwner(_address) {
+    function IncreasePow(address _address, uint256 _value)
+        public
+        isOwner(_address)
+    {
         require(goldBalanceOf(_address) >= PowFee);
         goldBurn(_address, PowFee);
 
         Characters storage character = _Character[_address];
-        uint32 number = uint32(getStatus());
-        character.Pow += number;
+        character.Pow += _value;
     }
 
     function getPow(address _address)

@@ -26,26 +26,11 @@
       .Welcome_explain {
         font-size: 20px;
       }
-
-      .Welcome_title_button {
-        margin: 10px;
-        padding: 20px;
-        background-color: royalblue;
-        border: none;
-        border-radius: 10px;
-        color: #fff;
-        font-size: 20px;
-        font-weight: 800;
-        cursor: pointer;
-        &:hover {
-          transition: 0.5s;
-          transform: scale(1.1);
-        }
-      }
     }
 
     .Welcome_lists {
       display: block;
+
       width: 60%;
       margin-top: 20px;
       .Welcome_list {
@@ -78,6 +63,7 @@
     height: 80%;
     display: flex;
     flex-direction: column;
+    -webkit-animation: fadein 3s;
 
     .Char_Img {
       margin: 10%;

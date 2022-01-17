@@ -50,6 +50,11 @@
     }
 
     .Map_img {
+      transition-duration: 1.5s;
+      opacity: 0.5;
+      &:hover {
+        opacity: 1;
+      }
       background-color: red;
       width: 200px;
       height: 250px;

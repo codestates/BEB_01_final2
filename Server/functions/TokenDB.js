@@ -1,0 +1,16 @@
+import { plusnonce } from "../app.js";
+import { TokenDB } from "../models.js";
+
+export const deposit_TokenDB = async (Tx, address) => {
+  const makeTokenDB = await new TokenDB({
+    To_Array: address,
+    messageHash: Tx.messageHash,
+    v: Tx.v,
+    r: Tx.r,
+    s: Tx.s,
+    rawTransaction: Tx.rawTransaction,
+    transactionHash: Tx.transactionHash,
+  });
+  makeTokenDB.save();
+  plusnonce();
+};

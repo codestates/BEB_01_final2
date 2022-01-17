@@ -1,11 +1,10 @@
 import Web3 from "web3";
 import dotenv from "dotenv";
-import { Token_abi } from "./abi,bytecode/Token_abi.js";
-import { TokenDB } from "../models.js";
-import { Character_abi } from "./abi,bytecode/Character.js";
-import { nonce, plusnonce } from "../app.js";
-
 dotenv.config();
+import { Token_abi } from "./abi,bytecode/Token_abi.js";
+import { Character_abi } from "./abi,bytecode/Character.js";
+import { nonce } from "../app.js";
+import { deposit_TokenDB } from "../functions/TokenDB.js";
 
 export const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.infuraURL)
@@ -36,18 +35,8 @@ export const mintTokenArray = async (address) => {
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
       .then(async (Tx) => {
-        const makeTokenDB = await new TokenDB({
-          To_Array: address,
-          messageHash: Tx.messageHash,
-          v: Tx.v,
-          r: Tx.r,
-          s: Tx.s,
-          rawTransaction: Tx.rawTransaction,
-          transactionHash: Tx.transactionHash,
-        });
-        makeTokenDB.save();
+        deposit_TokenDB(Tx, address);
       });
-    plusnonce();
     console.log("DB : mint_All실행!!");
   });
 };
@@ -65,18 +54,8 @@ export const mintToken = async (address, amount) => {
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
       .then(async (Tx) => {
-        const makeTokenDB = await new TokenDB({
-          To_Array: address,
-          messageHash: Tx.messageHash,
-          v: Tx.v,
-          r: Tx.r,
-          s: Tx.s,
-          rawTransaction: Tx.rawTransaction,
-          transactionHash: Tx.transactionHash,
-        });
-        makeTokenDB.save();
+        deposit_TokenDB(Tx, address);
       });
-    plusnonce();
     console.log("DB : mint_token실행!");
   });
 };
@@ -93,18 +72,9 @@ export const makeCharacter = async (address) => {
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
       .then(async (Tx) => {
-        const makeTokenDB = await new TokenDB({
-          To_Array: address,
-          messageHash: Tx.messageHash,
-          v: Tx.v,
-          r: Tx.r,
-          s: Tx.s,
-          rawTransaction: Tx.rawTransaction,
-          transactionHash: Tx.transactionHash,
-        });
-        makeTokenDB.save();
+        deposit_TokenDB(Tx, address);
       });
-    plusnonce();
+
     console.log("DB : block 캐릭터 생성 완료!");
   });
 };
@@ -131,19 +101,46 @@ export const mintNFT = async (address, img) => {
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
       .then(async (Tx) => {
-        const makeTokenDB = await new TokenDB({
-          To_Array: address,
-          messageHash: Tx.messageHash,
-          v: Tx.v,
-          r: Tx.r,
-          s: Tx.s,
-          rawTransaction: Tx.rawTransaction,
-          transactionHash: Tx.transactionHash,
-        });
-        makeTokenDB.save();
+        deposit_TokenDB(Tx, address);
       });
-    plusnonce();
+
     console.log("DB : block NFT 생성 완료!");
+  });
+};
+
+export const UpPow = async (address, random) => {
+  CharacterContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Character_CA,
+      nonce: nonce,
+      gas: 500000,
+      data: method.IncreasePow(address, random).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB(Tx, address);
+      });
+    console.log("DB : UpPow");
+  });
+};
+
+export const UpLimit = async (address) => {
+  CharacterContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Character_CA,
+      nonce: nonce,
+      gas: 500000,
+      data: method.IncreaseLimit(address).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB(Tx, address);
+      });
+    console.log("DB : UpLimit");
   });
 };
 
@@ -155,7 +152,6 @@ export const getNFTLIst = async (address) => {
 
     for (let i = 1; i <= length; i++) {
       if ((await method.ownerOf(i).call()) === address) {
-        // console.log(await method.getNFT(i).call());
         NFTList.push(await method.getNFT(i).call());
       }
     }

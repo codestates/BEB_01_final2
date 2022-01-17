@@ -1,0 +1,101 @@
+.Deal_app {
+  width: 100%;
+  background-color: #0f0e13;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 80%, hsla(225, 39%, 25%, 1) 0, transparent 20%),
+    radial-gradient(at 80% 10%, hsla(225, 39%, 25%, 1) 0, transparent 20%),
+    radial-gradient(at 10% 10%, hsla(339, 49%, 30%, 1) 0, transparent 30%),
+    radial-gradient(at 10% 90%, hsla(339, 49%, 30%, 1) 0, transparent 20%),
+    radial-gradient(at 60% 55%, rgb(148, 73, 99) 0, transparent 30%);
+  height: 140vh;
+
+  .Deal_title {
+    text-align: center;
+    font-weight: 800;
+    font-size: 100px;
+    color: #fff;
+  }
+
+  .Deal_container {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    height: 80%;
+    position: relative;
+
+    .Deal_text {
+      color: #fff;
+      z-index: 9999;
+      height: 100%;
+      overflow: scroll;
+
+      .Deal_item_title {
+        display: flex;
+        font-weight: 800;
+        justify-content: space-around;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        list-style: none;
+        color: #fff;
+        background-color: #18206f;
+        border-radius: 30px;
+        z-index: inherit;
+        li {
+          padding: 10px 20px;
+        }
+      }
+
+      .Deal_item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-weight: 800;
+        border-radius: 30px;
+        margin-top: 20px;
+        font-weight: 800;
+        padding: 20px 0px;
+        border-bottom: 1px solid black;
+        cursor: pointer;
+        transition-duration: 1s;
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        &:hover .deal_change {
+          animation: slide 1s ease-out;
+          opacity: 1;
+        }
+        &:hover .deal_item_name {
+          opacity: 0;
+        }
+
+        .deal_change {
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0px;
+          opacity: 0;
+          right: 10%;
+          transition-duration: 1s;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slide {
+  from {
+    right: -300px;
+    opacity: 0;
+  }
+  to {
+    right: 150px;
+    opacity: 1;
+  }
+}

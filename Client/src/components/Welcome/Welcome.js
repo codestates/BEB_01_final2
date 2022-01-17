@@ -17,9 +17,6 @@ function Welcome() {
             Explore the crypto world. Play and Earn in Crypto World <br></br>
             BlockChain will lead You!! Just join and Play!
           </div>
-          <Link to="/MyPage">
-            <button className="Welcome_title_button">Let's get started</button>
-          </Link>
         </div>
         <div className="Welcome_lists">
           <div className="Welcome_list">Reliability</div>

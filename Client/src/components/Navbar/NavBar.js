@@ -83,6 +83,13 @@ function NavBar({ address, user, openlogin }) {
           <Link to="/Shop" className="menu-item">
             <li>Shop</li>
           </Link>
+          {user || address ? (
+            <Link to="/Deal" className="menu-item">
+              <li>Deal</li>
+            </Link>
+          ) : (
+            ""
+          )}
         </ul>
       </div>
     </div>
