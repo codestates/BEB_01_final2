@@ -5,11 +5,14 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 dotenv.config();
 
-import User from "./routers/User.js";
-import ItemRouter from "./routers/ItemRouter.js";
-import MapRouter from "./routers/MapRouter.js";
-import CharacterRouter from "./routers/CharacterRouter.js";
-import SellingItemRouter from "./routers/SellingItemRouter.js";
+import {
+  User,
+  ItemRouter,
+  MapRouter,
+  CharacterRouter,
+  SellingItemRouter,
+} from "./routers/TotalRouter.js";
+
 import { SetMapData } from "./functions/SetMapData.js";
 import { setItemData } from "./functions/SetItemData.js";
 import { web3 } from "./web3/web3.js";
@@ -61,13 +64,13 @@ mongoose
   .connect(URL)
   .then((result, err) => {
     if (!err) {
-      app.listen(PORT, (req, res) => {
+      app.listen(PORT, async (req, res) => {
         console.log(`DB는 mongoose, PORT 번호는 ${PORT}`);
+        getnonce();
+        getNFT_amount();
+        SetMapData();
+        setItemData();
       });
-      getnonce();
-      getNFT_amount();
-      SetMapData();
-      setItemData();
     } else {
       console.error(err);
     }

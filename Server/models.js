@@ -47,8 +47,7 @@ const SellingSchema = mongoose.Schema({
     default: "none",
   },
   price: Number,
-  time: String,
-
+  time: Object,
   item: Object,
 });
 

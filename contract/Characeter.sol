@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.10;
-import "./Token.sol";
-import "./NFT.sol";
+import "./libraries/Token.sol";
+import "./libraries/NFT.sol";
 
 contract Character is NFT("item", "ITM") {
     Token private gold;
@@ -89,7 +89,7 @@ contract Character is NFT("item", "ITM") {
         goldBurn(_address, PowFee);
 
         Characters storage character = _Character[_address];
-        character.Pow += _value;
+        character.Pow += uint32(_value);
     }
 
     function getPow(address _address)

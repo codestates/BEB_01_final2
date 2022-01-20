@@ -4,7 +4,11 @@ dotenv.config();
 import { Token_abi } from "./abi,bytecode/Token_abi.js";
 import { Character_abi } from "./abi,bytecode/Character.js";
 import { nonce } from "../app.js";
-import { deposit_TokenDB } from "../functions/TokenDB.js";
+import {
+  deposit_TokenDB,
+  deposit_TokenDB_No_address,
+} from "../functions/TokenDB.js";
+import { auction_abi } from "./abi,bytecode/Auction.js";
 
 export const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.infuraURL)
@@ -16,9 +20,18 @@ export const TokenContract = async () => {
 };
 
 export const CharacterContract = async () => {
+  // CharacterContract에 NFT컨트랙트가 들어가 있기 떄문에 사용
   const Contract = await new web3.eth.Contract(
     Character_abi,
     process.env.Character_CA
+  );
+  return Contract.methods;
+};
+
+export const AuctionContract = async () => {
+  const Contract = await new web3.eth.Contract(
+    auction_abi,
+    process.env.Auction_CA
   );
   return Contract.methods;
 };
@@ -30,6 +43,7 @@ export const mintTokenArray = async (address) => {
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.mintAll(address, 10).encodeABI(),
     };
     await web3.eth.accounts
@@ -43,12 +57,12 @@ export const mintTokenArray = async (address) => {
 
 export const mintToken = async (address, amount) => {
   CharacterContract().then(async (method) => {
-    console.log(method);
     let tx = {
       from: process.env.Server_Address,
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.goldMint(address, amount).encodeABI(),
     };
     await web3.eth.accounts
@@ -67,6 +81,7 @@ export const makeCharacter = async (address) => {
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.makeCharacter(address).encodeABI(),
     };
     await web3.eth.accounts
@@ -96,6 +111,7 @@ export const mintNFT = async (address, img) => {
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.mintNFT(address, img).encodeABI(),
     };
     await web3.eth.accounts
@@ -115,6 +131,7 @@ export const UpPow = async (address, random) => {
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.IncreasePow(address, random).encodeABI(),
     };
     await web3.eth.accounts
@@ -133,6 +150,7 @@ export const UpLimit = async (address) => {
       to: process.env.Character_CA,
       nonce: nonce,
       gas: 500000,
+      gaslimit: 1000000,
       data: method.IncreaseLimit(address).encodeABI(),
     };
     await web3.eth.accounts
@@ -144,18 +162,78 @@ export const UpLimit = async (address) => {
   });
 };
 
-export const getNFTLIst = async (address) => {
-  await CharacterContract().then(async (method) => {
-    let NFTList = [];
+export const makeTrade = async (price, idx) => {
+  AuctionContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Auction_CA,
+      nonce: nonce,
+      gas: 500000,
+      gaslimit: 1000000,
+      data: method.make_trade(price, idx).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB(Tx, owner);
+      });
+    console.log("DB : making Trade!!");
+  });
+};
 
-    const length = await method.getTotalNFTAmount().call();
+export const Bidding = async (price, buyer, idx) => {
+  AuctionContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Auction_CA,
+      nonce: nonce,
+      gas: 500000,
+      gaslimit: 1000000,
+      data: method.Bid(price, buyer, idx).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB(Tx, buyer);
+      });
+    console.log("DB : Bidding!!!");
+  });
+};
 
-    for (let i = 1; i <= length; i++) {
-      if ((await method.ownerOf(i).call()) === address) {
-        NFTList.push(await method.getNFT(i).call());
-      }
-    }
+export const trade = async (idx) => {
+  AuctionContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Auction_CA,
+      nonce: nonce,
+      gas: 500000,
+      gaslimit: 1000000,
+      data: method.trade(idx).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB_No_address(Tx);
+      });
+    console.log("DB : Trade!");
+  });
+};
 
-    return NFTList;
+export const tradeOff = async (idx) => {
+  AuctionContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: process.env.Auction_CA,
+      nonce: nonce,
+      gas: 500000,
+      gaslimit: 1000000,
+      data: method.tradeOff(idx).encodeABI(),
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        deposit_TokenDB_No_address(Tx);
+      });
+    console.log("DB : Trade_Off");
   });
 };

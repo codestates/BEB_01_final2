@@ -54,70 +54,65 @@ export const updateMap = async (req, res) => {
       address: AttackAddress,
     });
     const Attacker_User = await UserDB.findOne({ address: AttackAddress });
-
     const defense_User = await UserDB.findOne({ address: beforeOwner });
 
     const random_number = (await MakeRandomNumber_Using_web3()) / 10;
-
     const Want_Attack_Soldier = req.body.soldier;
 
     const Map_defense_force = defense_Character.Pow * random_number;
     const Map_defense_Soldier = temp.force;
 
     const Attacker_Pow = Attacker_Character.Pow * random_number;
-    const Attacker_having_Soldier = Attacker_User.Soldier;
 
+    const Attacker_having_Soldier = Attacker_User.Soldier;
     if (Want_Attack_Soldier > Attacker_having_Soldier) {
       res.status(200).send({ message: "그만큼의 병력이 없습니다...ㅠ" });
-    }
-
-    const total_Attack_Power = Attacker_Pow * Want_Attack_Soldier;
-    const total_defense_Power = Map_defense_force * Map_defense_Soldier;
-
-    if (total_Attack_Power >= total_defense_Power) {
-      // 공격자가 이겼다는 의미
-      // 공격자 DB업데이트
-      const Attacker_update = await UserDB.findOneAndUpdate(
-        { address: AttackAddress },
-        {
-          Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
-          HavingLands: [...Attacker_User.HavingLands, temp.MapName],
-          Token: Attacker_User.Token + temp.GiveToken,
-        },
-        {
-          new: true,
-        }
-      );
-      const Map_update = await MapDB.findOneAndUpdate(
-        { idx: idx },
-        { owner: AttackAddress, force: Want_Attack_Soldier },
-        { new: true }
-      );
-      mintToken(AttackAddress, temp.GiveToken);
-      res.status(200).send({ message: "공격자 승리!!!!" });
     } else {
-      // 수비자가 이겼다는 의미
-      const Attacker_update = await UserDB.findOneAndUpdate(
-        { address: AttackAddress },
-        {
-          Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
-        },
-        {
-          new: true,
-        }
-      );
-      const defense_update = await UserDB.findOneAndUpdate(
-        { address: beforeOwner },
-        {
-          Token: defense_User + temp.GiveToken,
-        },
-        { new: true }
-      );
-      mintToken(beforeOwner, temp.GiveToken);
-      res.status(200).send({ message: "방어자 승리!!!!" });
+      const total_Attack_Power = Attacker_Pow * Want_Attack_Soldier;
+      const total_defense_Power = Map_defense_force * Map_defense_Soldier;
+
+      if (total_Attack_Power >= total_defense_Power) {
+        const Attacker_update = await UserDB.findOneAndUpdate(
+          { address: AttackAddress },
+          {
+            Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
+            HavingLands: [...Attacker_User.HavingLands, temp.MapName],
+            Token: Attacker_User.Token + temp.GiveToken,
+          },
+          {
+            new: true,
+          }
+        );
+        const Map_update = await MapDB.findOneAndUpdate(
+          { idx: idx },
+          { owner: AttackAddress, force: Want_Attack_Soldier },
+          { new: true }
+        );
+        mintToken(AttackAddress, temp.GiveToken);
+        res.status(200).send({ message: "공격자 승리!!!!" });
+      } else {
+        // 수비자가 이겼다는 의미
+        console.log("방어");
+        const Attacker_update = await UserDB.findOneAndUpdate(
+          { address: AttackAddress },
+          {
+            Soldier: Attacker_User.Soldier - Want_Attack_Soldier,
+          },
+          {
+            new: true,
+          }
+        );
+        const defense_update = await UserDB.findOneAndUpdate(
+          { address: beforeOwner },
+          {
+            Token: defense_User.Token + temp.GiveToken,
+          },
+          { new: true }
+        );
+        mintToken(beforeOwner, temp.GiveToken);
+        res.status(200).send({ message: "방어자 승리!!!!" });
+      }
     }
-    // 캐릭터 pow에 소수점에 부여되는 random_number을 곱한뒤
-    // 해당 값을 병력에 곱하여 서로 비교를 한다.
   }
 };
 

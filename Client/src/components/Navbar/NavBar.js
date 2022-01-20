@@ -22,7 +22,10 @@ function NavBar({ address, user, openlogin }) {
     const rule = new schedule.RecurrenceRule();
     rule.minute = 1;
 
-    const job = () =>
+    const Bidding_Time = new schedule.RecurrenceRule();
+    Bidding_Time.second = 1;
+
+    const job = () => {
       schedule.scheduleJob(rule, async () => {
         await axios
           .get("http://localhost:8080/Map/GiveToken")
@@ -30,6 +33,15 @@ function NavBar({ address, user, openlogin }) {
             console.log(result.data.message);
           });
       });
+
+      schedule.scheduleJob(Bidding_Time, async () => {
+        await axios
+          .get("http://localhost:8080/SellingItem/trade")
+          .then((result) => {
+            console.log("거래소 훑어봄!");
+          });
+      });
+    };
 
     if (ch === false) {
       job();

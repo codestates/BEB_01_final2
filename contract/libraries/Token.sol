@@ -24,11 +24,6 @@ contract Token is TokenInterface {
     string private _symbol;
     uint256 private _decimals;
 
-    modifier isMint(address account) {
-        require(_check[account] == true, "Address without minting");
-        _;
-    }
-
     constructor(string memory TokenName_, string memory TokenSymbol_) {
         _name = TokenName_;
         _symbol = TokenSymbol_;
@@ -84,7 +79,7 @@ contract Token is TokenInterface {
         address from,
         address recipient,
         uint256 amount
-    ) public virtual override isMint(from) isMint(recipient) returns (bool) {
+    ) public virtual override returns (bool) {
         _transfer(from, recipient, amount);
         emit Transfer(from, recipient, amount);
         return true;
@@ -106,11 +101,7 @@ contract Token is TokenInterface {
         _balances[recipient] += amount;
     }
 
-    function _burn(address account, uint256 amount)
-        internal
-        virtual
-        isMint(account)
-    {
+    function _burn(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: burn from the zero address");
 
         uint256 accountBalance = _balances[account];

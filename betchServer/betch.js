@@ -20,12 +20,20 @@ app.use(cors());
 const rule = new schedule.RecurrenceRule();
 rule.minute = 30;
 
+export let check = false;
+
+export const changeStatus = () => {
+  check = !check;
+};
+
 app.get("/", (req, res) => {
   giveTokenBlockChain();
 });
 
 schedule.scheduleJob(rule, () => {
-  giveTokenBlockChain();
+  if (check === false) {
+    giveTokenBlockChain();
+  }
 });
 
 mongoose

@@ -1,6 +1,7 @@
 import { TokenDB } from "./models.js";
 import Web3 from "web3";
 import dotenv from "dotenv";
+import { changeStatus, check } from "./betch.js";
 dotenv.config();
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.infuraURL));
@@ -10,6 +11,7 @@ export const giveTokenBlockChain = async (req, res) => {
 
   if (answer.length > 0) {
     console.log(" ========== BlockChain기록 시작!===========");
+    changeStatus();
     for (let i = 0; i < answer.length; i++) {
       await web3.eth.sendSignedTransaction(
         answer[i].rawTransaction,
@@ -28,8 +30,10 @@ export const giveTokenBlockChain = async (req, res) => {
         }
       );
     }
+    changeStatus();
     console.log(" =========== BlockChain기록 완료 =========");
   } else {
     console.log("지급할 데이터가 없음!");
   }
 };
+//  Transaction was not mined within 750 seconds

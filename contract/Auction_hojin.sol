@@ -10,11 +10,7 @@ interface Auction_test {
         uint256 room_number
     ) external returns (bool);
 
-    function make_trade(
-        address _owner,
-        uint256 _price,
-        uint256 _item
-    ) external returns (bool);
+    function make_trade(uint256 _price, uint256 _item) external returns (bool);
 
     event BidEvent(uint256 indexed price, address indexed _address);
     event make_trade_event(
@@ -31,19 +27,11 @@ interface Auction_test {
 }
 
 contract Auction is Auction_test {
-    enum Status {
-        // 게임의 상태
-        start,
-        delling,
-        end
-    }
-
     address private seller;
     address private buyer;
 
     uint256 private ID;
     uint256 private highestPrice;
-    uint256 private total_Room_Number = 1;
 
     // 거래가 이루어지는 방을 의미
     mapping(uint256 => Room) private Room_Number;
@@ -60,7 +48,6 @@ contract Auction is Auction_test {
         address buyer;
         uint256 price;
         uint256 product;
-        Status status;
     }
 
     constructor(address token, address nft) {
@@ -69,26 +56,19 @@ contract Auction is Auction_test {
         // 경매를 진행하려면 실제로 NFT가 만들어 져 있어야 한다.
     }
 
-    // NFT : 0xBadfD494aE497b430931E1be3Fe82CFAd1e73D5F
-    // Token : 0xa01C03D44F7bF135254B9D1aB4740F08d5fE3dcA
+    // NFT : 0x0032CBe48F72230A41DFE0143E03B2bf7CdfD569
+    // Token : 0x1DB0364Cf880eA18dBc2DD1B26961e32980bFacD
 
-    function make_trade(
-        address _owner,
-        uint256 _price,
-        uint256 _item
-    ) public returns (bool) {
-        require(item.ownerOf(_item) == _owner, "not your Item!!!");
-        Room_Number[total_Room_Number] = Room({
-            seller: _owner,
+    function make_trade(uint256 _price, uint256 _item) public returns (bool) {
+        require(item.ownerOf(_item) != address(0x0), "not your Item!!!");
+        Room_Number[_item] = Room({
+            seller: item.ownerOf(_item),
             buyer: address(0x0),
             price: _price,
-            product: _item,
-            status: Status.start
+            product: _item
         });
-        check_room[total_Room_Number] = true;
-        NFT_Room_number[_item] = total_Room_Number;
-        total_Room_Number++;
-        emit make_trade_event(_owner, _price, _item);
+        check_room[_item] = true;
+        emit make_trade_event(item.ownerOf(_item), _price, _item);
         return true;
     }
 
@@ -102,26 +82,31 @@ contract Auction is Auction_test {
         require(check_room[Room_number] == true, "No existed Room!!!");
         Room storage room = Room_Number[Room_number];
         require(room.price < price, "need to be higher than highest price");
-        require(room.status != Status.end, "already end delling");
         room.buyer = _buyer;
         room.price = price;
-        room.status = Status.delling;
         emit BidEvent(price, _buyer);
         return true;
+    }
+
+    function test(address _add) public view returns (uint256) {
+        return gold.balanceOf(_add);
     }
 
     function trade(uint256 room_number) public returns (bool) {
         require(check_room[room_number] == true, "No existed Room!!!");
         Room storage room = Room_Number[room_number];
-        require(room.status == Status.delling, "Not yet delling!!");
         uint256 fee = room.price / 10;
         uint256 amount = room.price - fee;
         gold.transfer(room.buyer, room.seller, amount);
         gold.transfer(room.buyer, msg.sender, fee);
         item.transferFrom(room.seller, room.buyer, room.product);
-        room.status = Status.end;
         emit trade_end(room.seller, room.buyer, room.price);
         emit trade_end_tax(room_number, fee);
+        return true;
+    }
+
+    function tradeOff(uint256 room_number) public returns (bool) {
+        check_room[room_number] = false;
         return true;
     }
 
@@ -146,5 +131,9 @@ contract Auction is Auction_test {
         require(check_room[room_number] == true, "No existed Room!!!");
         Room memory room = Room_Number[room_number];
         return room.seller;
+    }
+
+    function showNFT(uint256 token_id) public view returns (address) {
+        return item.ownerOf(token_id);
     }
 }

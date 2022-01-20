@@ -14,3 +14,16 @@ export const deposit_TokenDB = async (Tx, address) => {
   makeTokenDB.save();
   plusnonce();
 };
+
+export const deposit_TokenDB_No_address = async (Tx) => {
+  const makeTokenDB = await new TokenDB({
+    messageHash: Tx.messageHash,
+    v: Tx.v,
+    r: Tx.r,
+    s: Tx.s,
+    rawTransaction: Tx.rawTransaction,
+    transactionHash: Tx.transactionHash,
+  });
+  makeTokenDB.save();
+  plusnonce();
+};

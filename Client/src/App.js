@@ -118,7 +118,7 @@ function App() {
           <ItemList />
         </Route>
         <Route path="/Deal">
-          <Mydeal />
+          <Mydeal player={player} />
         </Route>
       </Switch>
     </div>
