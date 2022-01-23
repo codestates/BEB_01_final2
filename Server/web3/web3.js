@@ -1,38 +1,31 @@
 import Web3 from "web3";
 import dotenv from "dotenv";
 dotenv.config();
-import { Token_abi } from "./abi,bytecode/Token_abi.js";
-import { Character_abi } from "./abi,bytecode/Character.js";
 import { nonce } from "../app.js";
 import {
   deposit_TokenDB,
   deposit_TokenDB_No_address,
 } from "../functions/TokenDB.js";
-import { auction_abi } from "./abi,bytecode/Auction.js";
+
+import { Auction_abi, character_abi, Token_abi } from "./abi_total.js";
+import { Token_CA, character_CA, auction_CA } from "./CA_total.js";
 
 export const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.infuraURL)
 );
 
 export const TokenContract = async () => {
-  const Contract = await new web3.eth.Contract(Token_abi, process.env.Token_CA);
+  const Contract = await new web3.eth.Contract(Token_abi, Token_CA);
   return Contract.methods;
 };
 
 export const CharacterContract = async () => {
-  // CharacterContract에 NFT컨트랙트가 들어가 있기 떄문에 사용
-  const Contract = await new web3.eth.Contract(
-    Character_abi,
-    process.env.Character_CA
-  );
+  const Contract = await new web3.eth.Contract(character_abi, character_CA);
   return Contract.methods;
 };
 
 export const AuctionContract = async () => {
-  const Contract = await new web3.eth.Contract(
-    auction_abi,
-    process.env.Auction_CA
-  );
+  const Contract = await new web3.eth.Contract(Auction_abi, auction_CA);
   return Contract.methods;
 };
 
@@ -175,7 +168,7 @@ export const makeTrade = async (price, idx) => {
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
       .then(async (Tx) => {
-        deposit_TokenDB(Tx, owner);
+        deposit_TokenDB_No_address(Tx);
       });
     console.log("DB : making Trade!!");
   });

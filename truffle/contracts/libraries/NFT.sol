@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.8.10;
+pragma solidity 0.8.0;
 
 import "./ERC165.sol";
-import "./Strings.sol";
+import "./utils/Strings.sol";
 import "./Token.sol";
 
 interface IERC721 is IERC165 {

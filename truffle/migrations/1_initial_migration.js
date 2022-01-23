@@ -1,0 +1,30 @@
+const fs = require("fs");
+const basePath = "/Users/yuhojin/Desktop/BEB_01_final2-contract";
+const path = require("path");
+const Token = artifacts.require("Token");
+const Auction_hojin = artifacts.require("Auction");
+const Character = artifacts.require("Character");
+// const Swap = artifacts.require("Swap");
+
+module.exports = async function (deployer) {
+  await deployer.deploy(Token, "GOLD", "GD");
+  const token = await Token.deployed();
+
+  fs.writeFileSync(path.join(basePath, "/Server/CA/token_CA"), token.address);
+
+  await deployer.deploy(Character, token.address);
+  const character = await Character.deployed();
+
+  fs.writeFileSync(
+    path.join(basePath, "/Server/CA/character_CA"),
+    character.address
+  );
+
+  await deployer.deploy(Auction_hojin, token.address, character.address);
+  const auction = await Auction_hojin.deployed();
+
+  fs.writeFileSync(
+    path.join(basePath, "/Server/CA/auction_CA"),
+    auction.address
+  );
+};

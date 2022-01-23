@@ -24,7 +24,7 @@ export const makeSellingITem = async (req, res) => {
       time: temp,
     });
     answer.save();
-    makeTrade(owner.address, price, item.id);
+    makeTrade(price, item.id);
     res.status(200).send({ message: "상품 등록 완료!" });
   } else {
     res.status(200).send({ message: "이미 등록된 상품 입니다!" });
@@ -85,6 +85,7 @@ export const Bid = async (req, res) => {
 };
 
 export const trade = async (req, res) => {
+  console.log("trading!!!");
   const now_time = new Date();
   const temp = await SellingItemDB.find({});
 
@@ -100,6 +101,7 @@ export const trade = async (req, res) => {
 
         const Item_list = Seller.NFTList;
         let arr = [];
+
         for (let j = 0; j < Item_list.length; j++) {
           if (Item_list[j].id !== temp[i].id) {
             arr.push(Item_list[j]);

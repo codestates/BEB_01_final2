@@ -45,6 +45,13 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
     SetPrivKey(openlogin.privKey);
   };
 
+  // const onLoginMetaMask = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   console.log(accounts[0]);
+  // };
+
   return (
     <div className="Login_box">
       <img src="./img/로그인 배경화면.jpeg" className="background_img" />
@@ -63,6 +70,9 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
           <button className="Google_button" onClick={onLoginGoogle}>
             Google_Login
           </button>
+          {/* <button className="Google_button" onClick={onLoginMetaMask}>
+            Meta_Mask
+          </button> */}
         </div>
 
         <Link to="/SignIn">

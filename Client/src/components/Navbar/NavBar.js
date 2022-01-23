@@ -22,8 +22,11 @@ function NavBar({ address, user, openlogin }) {
     const rule = new schedule.RecurrenceRule();
     rule.minute = 1;
 
-    const Bidding_Time = new schedule.RecurrenceRule();
-    Bidding_Time.second = 1;
+    const selling_item = new schedule.RecurrenceRule();
+    selling_item.second = 1;
+
+    const charge_soldier = new schedule.RecurrenceRule();
+    charge_soldier.hour = 1;
 
     const job = () => {
       schedule.scheduleJob(rule, async () => {
@@ -34,12 +37,16 @@ function NavBar({ address, user, openlogin }) {
           });
       });
 
-      schedule.scheduleJob(Bidding_Time, async () => {
+      schedule.scheduleJob(selling_item, async () => {
         await axios
           .get("http://localhost:8080/SellingItem/trade")
           .then((result) => {
             console.log("거래소 훑어봄!");
           });
+      });
+
+      schedule.scheduleJob(charge_soldier, async () => {
+        await axios.get("http://localhost:8080/charge");
       });
     };
 

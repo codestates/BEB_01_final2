@@ -37,7 +37,6 @@ export const roulette = async (req, res) => {
     randomItem.pow = randomNum(10, 20);
   }
   randomItem.id = NFT_index;
-  console.log(randomItem);
   plusNFT_index();
 
   await UserDB.findOneAndUpdate(

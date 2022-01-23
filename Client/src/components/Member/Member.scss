@@ -43,7 +43,8 @@
 
       .member_text {
         position: absolute;
-        top: 100px;
+        top: 30px;
+        left: 10px;
       }
 
       img {
@@ -52,4 +53,13 @@
       }
     }
   }
+}
+
+span {
+  color: black;
+  font-weight: 800;
+}
+
+p {
+  margin: 0px;
 }

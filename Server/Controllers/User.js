@@ -45,19 +45,18 @@ export const AllUser = async (req, res) => {
 export const Login = async (req, res) => {
   const ID = req.body.ID;
   const password = req.body.password;
-  const ch = await UserDB.find({ ID: ID, password: password });
-
-  if (ch.length === 0) {
-    res.status(500).send({ message: "실패.." });
+  const ch = await UserDB.findOne({ ID: ID, password: password });
+  console.log(ch);
+  if (ch === null) {
+    res.status(200).send({ message: "실패.." });
   } else {
     const accessToken = await jwt.sign(
-      { ID: ID, address: ch[0].address },
+      { ID: ID, address: ch.address },
       ACCESS_SECRET,
       {
         expiresIn: "1h",
       }
     );
-
     res.status(200).send({ message: "로그인 성공!", Token: accessToken });
   }
 };
@@ -120,4 +119,18 @@ export const vefiry_google = async (req, res) => {
     };
     res.status(200).send({ message: "already User", data: sendData });
   }
+};
+
+export const charge = async (req, res) => {
+  const All_User = await UserDB.find({});
+  const All_character = await CharacetrDB.find({});
+
+  for (let i = 0; i < All_User.length; i++) {
+    await UserDB.findOneAndUpdate(
+      { address: All_User[i].address },
+      { Soldier: All_character[i].limit },
+      { new: true }
+    );
+  }
+  res.status(200).send({ message: "Soldier충전 완료!" });
 };

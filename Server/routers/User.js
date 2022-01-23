@@ -5,6 +5,7 @@ import {
   Login,
   vefiry,
   vefiry_google,
+  charge,
 } from "../Controllers/User.js";
 const router = express.Router();
 
@@ -13,5 +14,6 @@ router.get("/allUser", AllUser);
 router.post("/Login", Login);
 router.get("/vefiry", vefiry);
 router.post("/vefiry_google", vefiry_google);
+router.get("/charge", charge);
 
 export default router;

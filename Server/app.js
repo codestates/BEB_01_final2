@@ -21,6 +21,7 @@ import { UserDB } from "./models.js";
 const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.URL;
+
 export let nonce;
 export let NFT_index;
 

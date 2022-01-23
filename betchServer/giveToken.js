@@ -1,7 +1,7 @@
 import { TokenDB } from "./models.js";
 import Web3 from "web3";
 import dotenv from "dotenv";
-import { changeStatus, check } from "./betch.js";
+import { changeStatus } from "./betch.js";
 dotenv.config();
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.infuraURL));

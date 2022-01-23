@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity 0.8.10;
+pragma solidity 0.8.0;
 import "./libraries/NFT.sol";
 import "./libraries/Token.sol";
 
@@ -59,7 +59,11 @@ contract Auction is Auction_test {
     // NFT : 0x0032CBe48F72230A41DFE0143E03B2bf7CdfD569
     // Token : 0x1DB0364Cf880eA18dBc2DD1B26961e32980bFacD
 
-    function make_trade(uint256 _price, uint256 _item) public returns (bool) {
+    function make_trade(uint256 _price, uint256 _item)
+        public
+        override
+        returns (bool)
+    {
         require(item.ownerOf(_item) != address(0x0), "not your Item!!!");
         Room_Number[_item] = Room({
             seller: item.ownerOf(_item),
@@ -76,7 +80,7 @@ contract Auction is Auction_test {
         uint256 price,
         address _buyer,
         uint256 Room_number
-    ) public returns (bool) {
+    ) public override returns (bool) {
         uint256 balance = gold.balanceOf(_buyer);
         require(price < balance, "price exceeds balance");
         require(check_room[Room_number] == true, "No existed Room!!!");

@@ -28,7 +28,7 @@ export const oneCharacter = async (req, res) => {
         { Token: check.Token - 50 },
         { new: true }
       );
-      // UpPow(address, random_number);
+      UpPow(address, random_number);
       res.status(200).send({ message: "Pow_Upgrade" });
     }
   } else {
@@ -51,7 +51,7 @@ export const oneCharacter = async (req, res) => {
         { Token: check.Token - 100 },
         { new: true }
       );
-      // UpLimit(address);
+      UpLimit(address);
       res.status(200).send({ message: "limit_Upgrade" });
     }
   }
