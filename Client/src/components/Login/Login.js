@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { VERIFIER } from "../../utils/function/openLogin";
 
-function LogIn({ SetUser, openlogin, SetPrivKey }) {
+function LogIn({ SetUser, openlogin, SetPrivKey, SetMetamask_address }) {
   const [ID, SetID] = useState(false);
   const [password, SetPassword] = useState(false);
 
@@ -45,12 +45,15 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
     SetPrivKey(openlogin.privKey);
   };
 
-  // const onLoginMetaMask = async () => {
-  //   const accounts = await window.ethereum.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   console.log(accounts[0]);
-  // };
+  const onLoginMetaMask = async () => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    window.localStorage.setItem("meta_User", accounts[0]);
+    setTimeout(() => {
+      window.location.replace("http://localhost:3000");
+    }, 1000);
+  };
 
   return (
     <div className="Login_box">
@@ -70,9 +73,9 @@ function LogIn({ SetUser, openlogin, SetPrivKey }) {
           <button className="Google_button" onClick={onLoginGoogle}>
             Google_Login
           </button>
-          {/* <button className="Google_button" onClick={onLoginMetaMask}>
+          <button className="Google_button" onClick={onLoginMetaMask}>
             Meta_Mask
-          </button> */}
+          </button>
         </div>
 
         <Link to="/SignIn">

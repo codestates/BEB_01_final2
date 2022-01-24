@@ -11,6 +11,7 @@ import {
   MapRouter,
   CharacterRouter,
   SellingItemRouter,
+  Swap,
 } from "./routers/TotalRouter.js";
 
 import { SetMapData } from "./functions/SetMapData.js";
@@ -60,6 +61,7 @@ app.use("/Item", ItemRouter);
 app.use("/Map", MapRouter);
 app.use("/Character", CharacterRouter);
 app.use("/SellingItem", SellingItemRouter);
+app.use("/Swap", Swap);
 
 mongoose
   .connect(URL)

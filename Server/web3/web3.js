@@ -7,17 +7,12 @@ import {
   deposit_TokenDB_No_address,
 } from "../functions/TokenDB.js";
 
-import { Auction_abi, character_abi, Token_abi } from "./abi_total.js";
-import { Token_CA, character_CA, auction_CA } from "./CA_total.js";
+import { Auction_abi, character_abi } from "./abi_total.js";
+import { character_CA, auction_CA } from "./CA_total.js";
 
 export const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.infuraURL)
 );
-
-export const TokenContract = async () => {
-  const Contract = await new web3.eth.Contract(Token_abi, Token_CA);
-  return Contract.methods;
-};
 
 export const CharacterContract = async () => {
   const Contract = await new web3.eth.Contract(character_abi, character_CA);
@@ -33,11 +28,11 @@ export const mintTokenArray = async (address) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
-      data: method.mintAll(address, 10).encodeABI(),
+      data: method.goldmintAll(address, 10).encodeABI(),
     };
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
@@ -52,7 +47,7 @@ export const mintToken = async (address, amount) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -71,7 +66,7 @@ export const makeCharacter = async (address) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -82,7 +77,6 @@ export const makeCharacter = async (address) => {
       .then(async (Tx) => {
         deposit_TokenDB(Tx, address);
       });
-
     console.log("DB : block 캐릭터 생성 완료!");
   });
 };
@@ -101,11 +95,11 @@ export const mintNFT = async (address, img) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
-      data: method.mintNFT(address, img).encodeABI(),
+      data: method.NFTminting(address, img).encodeABI(),
     };
     await web3.eth.accounts
       .signTransaction(tx, process.env.Server_PrivateKey)
@@ -121,7 +115,7 @@ export const UpPow = async (address, random) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -140,7 +134,7 @@ export const UpLimit = async (address) => {
   CharacterContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Character_CA,
+      to: character_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -159,7 +153,7 @@ export const makeTrade = async (price, idx) => {
   AuctionContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Auction_CA,
+      to: auction_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -178,7 +172,7 @@ export const Bidding = async (price, buyer, idx) => {
   AuctionContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Auction_CA,
+      to: auction_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -197,7 +191,7 @@ export const trade = async (idx) => {
   AuctionContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Auction_CA,
+      to: auction_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -216,7 +210,7 @@ export const tradeOff = async (idx) => {
   AuctionContract().then(async (method) => {
     let tx = {
       from: process.env.Server_Address,
-      to: process.env.Auction_CA,
+      to: auction_CA,
       nonce: nonce,
       gas: 500000,
       gaslimit: 1000000,
@@ -229,4 +223,19 @@ export const tradeOff = async (idx) => {
       });
     console.log("DB : Trade_Off");
   });
+};
+
+export const buyToken = async (address, ETH) => {
+  CharacterContract().then(async (method) => {
+    let tx = {
+      from: address,
+      to: character_CA,
+      gas: 500000,
+      gaslimit: 1000000,
+      data: method.buyTokens().encodeABI(),
+      value: await web3.utils.toWei(ETH, "ether"),
+    };
+    await web3.eth.sendTransaction(tx);
+  });
+  return "hoijn";
 };

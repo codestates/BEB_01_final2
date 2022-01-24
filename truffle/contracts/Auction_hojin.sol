@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.0;
-import "./libraries/NFT.sol";
-import "./libraries/Token.sol";
+
+import "./Characeter.sol";
 
 interface Auction_test {
     function Bid(
@@ -40,8 +40,7 @@ contract Auction is Auction_test {
     // 들어오는 nft의 번호에 해당하는 room_number를 반환
     mapping(uint256 => uint256) private NFT_Room_number;
 
-    Token private gold;
-    NFT private item;
+    Character private character;
 
     struct Room {
         address seller;
@@ -50,29 +49,24 @@ contract Auction is Auction_test {
         uint256 product;
     }
 
-    constructor(address token, address nft) {
-        gold = Token(token);
-        item = NFT(nft);
-        // 경매를 진행하려면 실제로 NFT가 만들어 져 있어야 한다.
+    constructor(address _char) {
+        character = Character(_char);
     }
-
-    // NFT : 0x0032CBe48F72230A41DFE0143E03B2bf7CdfD569
-    // Token : 0x1DB0364Cf880eA18dBc2DD1B26961e32980bFacD
 
     function make_trade(uint256 _price, uint256 _item)
         public
         override
         returns (bool)
     {
-        require(item.ownerOf(_item) != address(0x0), "not your Item!!!");
+        require(character.ownerOf(_item) != address(0x0), "not your Item!!!");
         Room_Number[_item] = Room({
-            seller: item.ownerOf(_item),
+            seller: character.ownerOf(_item),
             buyer: address(0x0),
             price: _price,
             product: _item
         });
         check_room[_item] = true;
-        emit make_trade_event(item.ownerOf(_item), _price, _item);
+        emit make_trade_event(character.ownerOf(_item), _price, _item);
         return true;
     }
 
@@ -81,7 +75,7 @@ contract Auction is Auction_test {
         address _buyer,
         uint256 Room_number
     ) public override returns (bool) {
-        uint256 balance = gold.balanceOf(_buyer);
+        uint256 balance = character.goldBalanceOf(_buyer);
         require(price < balance, "price exceeds balance");
         require(check_room[Room_number] == true, "No existed Room!!!");
         Room storage room = Room_Number[Room_number];
@@ -92,18 +86,14 @@ contract Auction is Auction_test {
         return true;
     }
 
-    function test(address _add) public view returns (uint256) {
-        return gold.balanceOf(_add);
-    }
-
     function trade(uint256 room_number) public returns (bool) {
         require(check_room[room_number] == true, "No existed Room!!!");
         Room storage room = Room_Number[room_number];
         uint256 fee = room.price / 10;
         uint256 amount = room.price - fee;
-        gold.transfer(room.buyer, room.seller, amount);
-        gold.transfer(room.buyer, msg.sender, fee);
-        item.transferFrom(room.seller, room.buyer, room.product);
+        character.goldTransfer(room.buyer, room.seller, amount);
+        character.goldTransfer(room.buyer, msg.sender, fee);
+        character.transferFrom(room.seller, room.buyer, room.product);
         emit trade_end(room.seller, room.buyer, room.price);
         emit trade_end_tax(room_number, fee);
         return true;
@@ -135,9 +125,5 @@ contract Auction is Auction_test {
         require(check_room[room_number] == true, "No existed Room!!!");
         Room memory room = Room_Number[room_number];
         return room.seller;
-    }
-
-    function showNFT(uint256 token_id) public view returns (address) {
-        return item.ownerOf(token_id);
     }
 }

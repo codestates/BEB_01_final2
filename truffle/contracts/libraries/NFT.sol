@@ -14,7 +14,7 @@ interface IERC721 is IERC165 {
         address from,
         address to,
         uint256 tokenId
-    ) external returns (bool);
+    ) external  returns (bool);
 
     function approve(address to, uint256 tokenId) external returns (bool);
 
@@ -75,7 +75,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         _symbol = symbol_;
     }
 
-    function mintNFT(address to, string memory URI) public returns (uint256) {
+    function mintNFT(address to, string memory URI) internal returns (uint256) {
         _nftId++;
         _TotalNFTAmount++;
         uint256 newId = _nftId;
@@ -118,7 +118,7 @@ contract NFT is IERC721, IERC721Metadata, ERC165 {
         address from,
         address to,
         uint256 tokenId
-    ) public virtual override returns (bool) {
+    ) external virtual override  returns (bool) {
         require(
             _isApprovedOrOwner(from, tokenId),
             "ERC721: transfer caller is not owner nor approved"

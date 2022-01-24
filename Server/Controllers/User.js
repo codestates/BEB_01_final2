@@ -14,8 +14,10 @@ export const makeUser = async (req, res) => {
   if (IdCh.length !== 0) {
     res.status(200).send({ message: "아이디 중복!" });
   } else {
-    const answer = web3;
-    const account = await web3.eth.accounts.create();
+    let account;
+    try {
+      account = web3.eth.accounts.create(ACCESS_SECRET);
+    } catch {}
 
     const makeUser = await new UserDB({
       ID: ID,
@@ -29,6 +31,7 @@ export const makeUser = async (req, res) => {
       address: account.address,
     });
     makeDBCharacter.save();
+
     makeCharacter(account.address);
     res.status(200).send({
       message: "아이디 생성 완료!",
@@ -45,6 +48,7 @@ export const AllUser = async (req, res) => {
 export const Login = async (req, res) => {
   const ID = req.body.ID;
   const password = req.body.password;
+  console.log(ID);
   const ch = await UserDB.findOne({ ID: ID, password: password });
   console.log(ch);
   if (ch === null) {
@@ -62,14 +66,9 @@ export const Login = async (req, res) => {
 };
 
 export const vefiry = async (req, res) => {
-  let temp = req.headers.authorization.split(" ")[0];
-  let answer = "";
+  let temp = req.headers.authorization.split('"')[1];
 
-  for (let i = 1; i < temp.length - 1; i++) {
-    answer += temp[i];
-  }
-
-  let data = jwt.verify(answer, ACCESS_SECRET);
+  let data = jwt.verify(temp, ACCESS_SECRET);
 
   const User = await UserDB.findOne({ ID: data.ID });
   const Character = await CharacetrDB.findOne({ address: data.address });
@@ -92,6 +91,7 @@ export const vefiry_google = async (req, res) => {
   const Characetr = await CharacetrDB.findOne({
     address: req.body.address,
   });
+
   if (User === null) {
     const User = await new UserDB({ address: req.body.address });
     User.save();
@@ -121,6 +121,11 @@ export const vefiry_google = async (req, res) => {
   }
 };
 
+export const vefiry_metamask = async (req, res) => {
+  const address = req.body.address;
+  console.log(address);
+};
+
 export const charge = async (req, res) => {
   const All_User = await UserDB.find({});
   const All_character = await CharacetrDB.find({});
@@ -133,4 +138,14 @@ export const charge = async (req, res) => {
     );
   }
   res.status(200).send({ message: "Soldier충전 완료!" });
+};
+
+export const swap = async (req, res) => {
+  const User = await UserDB.findOne({ address: req.body.address });
+
+  const eth = await web3.eth.getBalance(req.body.address);
+
+  const ether_balance = await web3.utils.fromWei(eth, "ether");
+
+  res.status(200).send({ Token: User.Token, Eth: ether_balance });
 };

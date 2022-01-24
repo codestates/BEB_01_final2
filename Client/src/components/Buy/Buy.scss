@@ -1,0 +1,73 @@
+.Buy_App {
+  background-color: #212429;
+  width: 100%;
+  height: 95vh;
+  background-image: radial-gradient(
+      at 0% 0%,
+      hsla(253, 16%, 7%, 1) 0,
+      transparent 50%
+    ),
+    radial-gradient(at 80% 80%, hsla(225, 39%, 25%, 1) 0, transparent 20%),
+    radial-gradient(at 80% 10%, hsla(225, 39%, 25%, 1) 0, transparent 20%),
+    radial-gradient(at 10% 10%, hsla(339, 49%, 30%, 1) 0, transparent 30%),
+    radial-gradient(at 10% 90%, hsla(339, 49%, 30%, 1) 0, transparent 20%),
+    radial-gradient(at 60% 55%, rgb(148, 73, 99) 0, transparent 30%);
+
+  .Buy_container {
+    color: #fff;
+    width: 40%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 10%;
+
+    .Buy_layout {
+      background-color: rgb(33, 36, 41);
+      position: relative;
+      box-shadow: 1px 1px 1px 1px black;
+      border-radius: 50px;
+      padding: 30px;
+      width: max-content;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+      .Buy_title {
+        font-size: 1.1em;
+        font-weight: 800;
+        padding: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .Buy_eth {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .Buy_button {
+        background: none;
+        background-color: rgba(21, 61, 111, 0.44);
+        background-image: none;
+        color: rgb(80, 144, 234);
+        margin: 0px;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 16px;
+      }
+    }
+    .balance {
+      margin-top: 20px;
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .change_button {
+      cursor: pointer;
+      background-color: rgba(21, 61, 111, 0.44);
+
+      border-radius: 10px;
+      width: max-content;
+      padding: 10px;
+    }
+  }
+}

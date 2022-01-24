@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import schedule from "node-schedule";
 import axios from "axios";
 
-function NavBar({ address, user, openlogin }) {
+function NavBar({ player, user, address, openlogin, metamask_address }) {
   const [time, SetTime] = useState(new Date().toLocaleTimeString());
   const [ch, SetCh] = useState(false);
 
@@ -66,10 +66,13 @@ function NavBar({ address, user, openlogin }) {
       await openlogin.logout();
       window.location.reload();
     }
+    if (metamask_address) {
+      window.localStorage.removeItem("meta_User");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
   };
-  // time은 단순히 시간을 계속 갱신해 주는 것
-  // 그러면 내가 필요한 것은 일정시간에 토큰을 DB를 뒤져서 owner값들을 뺴오고 해당 owne에게 토큰을 전송해주는 로직이 필요
-  //
 
   return (
     <div className="NavBar_app">
@@ -78,9 +81,8 @@ function NavBar({ address, user, openlogin }) {
           <img src="./img/logo.png" alt="logo" />
         </div>
       </Link>
-      {time}
 
-      <div>
+      <div className="Navbar_text">
         <ul className="NavBar_ul">
           <Link to="/MyPage" className="menu-item">
             <li>My Page</li>
@@ -89,7 +91,7 @@ function NavBar({ address, user, openlogin }) {
           <Link to="/CryptoWorld" className="menu-item">
             <li>Crypto World</li>
           </Link>
-          {user || address ? (
+          {player ? (
             <li className="Logout" onClick={deleteUser}>
               Logout
             </li>
@@ -102,13 +104,16 @@ function NavBar({ address, user, openlogin }) {
           <Link to="/Shop" className="menu-item">
             <li>Shop</li>
           </Link>
-          {user || address ? (
+          {player ? (
             <Link to="/Deal" className="menu-item">
               <li>Deal</li>
             </Link>
           ) : (
             ""
           )}
+          <Link to="/Buy" className="menu-item">
+            <li>Buy</li>
+          </Link>
         </ul>
       </div>
     </div>

@@ -3,29 +3,71 @@ pragma solidity 0.8.0;
 import "./libraries/Token.sol";
 import "./libraries/NFT.sol";
 
-contract Character is NFT("item", "ITM") {
-    Token private gold;
+interface char {
+    event NewUser(
+        address indexed owner,
+        uint256 indexed Pow,
+        uint256 indexed limit
+    );
+    event TokenPurchased(
+        address indexed account,
+        uint256 indexed amount,
+        address indexed server
+    );
+}
+
+contract onlyOwner {
+    address public owner;
+    mapping(address => bool) public checkUser;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyowner() {
+        require(msg.sender == owner, "Not Owner!!");
+        _;
+    }
+    modifier isOwner(address _address) {
+        require(checkUser[_address] == true);
+        _;
+    }
+}
+
+contract Character is NFT("item", "ITM"), char, onlyOwner {
+    mapping(address => Characters) private _Character;
+    Token public gold;
     uint256 PowFee = 30;
     uint256 limitFee = 50;
+
+    struct Characters {
+        uint32 Pow;
+        uint32 limit;
+    }
 
     constructor(address token) {
         gold = Token(token);
     }
 
-    function goldTotalSupply() public view returns (uint256) {
-        return gold.totalSupply();
+    function buyTokens() public payable {
+        require(msg.sender != address(0x0), "No Existed address");
+
+        uint256 tokenAmount = msg.value / 100000000000;
+
+        gold.mintGold(tokenAmount, msg.sender);
+
+        address payable p_owner = payable(owner);
+        p_owner.transfer(msg.value);
+
+        emit TokenPurchased(msg.sender, tokenAmount, owner);
     }
 
-    function goldBalanceOf(address account) public view returns (uint256) {
-        return gold.balanceOf(account);
-    }
-
-    function goldCheck(address account) public view returns (bool) {
-        return gold.check(account);
-    }
-
-    function goldMint(address to, uint256 amount) public {
+    function goldMint(address to, uint256 amount) public onlyowner {
         gold.mintGold(amount, to);
+    }
+
+    function NFTminting(address to, string memory URI) public onlyowner {
+        NFT.mintNFT(to, URI);
     }
 
     function goldTransfer(
@@ -36,33 +78,18 @@ contract Character is NFT("item", "ITM") {
         gold.transfer(from, to, amount);
     }
 
-    function goldBurn(address account, uint256 amount) public {
+    function goldBurn(address account, uint256 amount) public onlyowner {
         gold.burn(account, amount);
     }
 
-    function mintAll(address[] memory account, uint256 amount) public {
+    function goldmintAll(address[] memory account, uint256 amount)
+        public
+        onlyowner
+    {
         gold.mintGoldAll(account, amount);
     }
 
-    modifier isOwner(address _address) {
-        require(checkUser[_address] == true);
-        _;
-    }
-    event NewUser(
-        address indexed owner,
-        uint256 indexed Pow,
-        uint256 indexed limit
-    );
-
-    mapping(address => bool) private checkUser;
-    mapping(address => Characters) private _Character;
-
-    struct Characters {
-        uint32 Pow;
-        uint32 limit;
-    }
-
-    function makeCharacter(address _address) public returns (bool) {
+    function makeCharacter(address _address) public onlyowner returns (bool) {
         require(checkUser[_address] == false);
         checkUser[_address] = true;
         Characters storage character = _Character[_address];
@@ -73,7 +100,11 @@ contract Character is NFT("item", "ITM") {
         return true;
     }
 
-    function IncreaseLimit(address _address) public isOwner(_address) {
+    function IncreaseLimit(address _address)
+        public
+        isOwner(_address)
+        onlyowner
+    {
         require(goldBalanceOf(_address) >= limitFee);
         goldBurn(_address, limitFee);
 
@@ -84,6 +115,7 @@ contract Character is NFT("item", "ITM") {
     function IncreasePow(address _address, uint256 _value)
         public
         isOwner(_address)
+        onlyowner
     {
         require(goldBalanceOf(_address) >= PowFee);
         goldBurn(_address, PowFee);
@@ -130,5 +162,19 @@ contract Character is NFT("item", "ITM") {
         return getRandomNumber() % 10;
     }
 
-    // 0xa241D7B42dc1B6DbC561EF98a5129D2f1155bfFe
+    function goldTotalSupply() public view returns (uint256) {
+        return gold.totalSupply();
+    }
+
+    function goldBalanceOf(address account) public view returns (uint256) {
+        return gold.balanceOf(account);
+    }
+
+    function goldCheck(address account) public view returns (bool) {
+        return gold.check(account);
+    }
+
+    function show_character_owner() public view returns (address) {
+        return owner;
+    }
 }

@@ -28,7 +28,7 @@ function SignIn() {
             password: password,
           })
           .then((result) => {
-            alert(result.data.message);
+            // alert(result.data.message);
             window.location.replace("http://localhost:3000/Login");
           });
       }

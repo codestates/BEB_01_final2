@@ -12,6 +12,7 @@ import {
   ItemList,
   Popup,
   Mydeal,
+  Buy,
 } from "./components/main";
 import { useEffect, useState } from "react";
 
@@ -21,14 +22,15 @@ import { ethers } from "ethers";
 import axios from "axios";
 
 function App() {
-  const [user, SetUser] = useState(
-    window.localStorage.getItem("User") || false
-  );
+  const [user, SetUser] = useState(window.localStorage.getItem("User"));
   const [openlogin, SetOpenLogin] = useState();
   const [privKey, SetPrivKey] = useState(false);
   const [address, SetAddress] = useState(false);
   const [player, SetPlayer] = useState(false);
   const [NFTData, SetNFTData] = useState(false);
+  const [metamask_address, SetMetamask_address] = useState(
+    window.localStorage.getItem("meta_User") || false
+  );
 
   const onMount = async () => {
     const openlogin = new OpenLogin({
@@ -52,11 +54,12 @@ function App() {
     }
   };
   const getUserData = async () => {
-    if (user !== false) {
+    if (user !== null) {
+      console.log(user);
       await axios
         .get("http://localhost:8080/vefiry", {
           headers: {
-            Authorization: user,
+            Authorization: "Bearer" + user,
           },
         })
         .then((result) => {
@@ -72,6 +75,15 @@ function App() {
           SetPlayer(result.data.data);
         });
     }
+    if (metamask_address !== false) {
+      await axios
+        .post("http://localhost:8080/vefiry_google", {
+          address: metamask_address,
+        })
+        .then((result) => {
+          SetPlayer(result.data.data);
+        });
+    }
   };
 
   useEffect(() => {
@@ -81,7 +93,13 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar address={address} user={user} openlogin={openlogin} />
+      <NavBar
+        address={address}
+        user={user}
+        player={player}
+        openlogin={openlogin}
+        metamask_address={metamask_address}
+      />
 
       <Switch>
         <Route exact path="/">
@@ -100,6 +118,7 @@ function App() {
             SetUser={SetUser}
             openlogin={openlogin}
             SetPrivKey={SetPrivKey}
+            SetMetamask_address={SetMetamask_address}
           />
         </Route>
         <Route path="/MyPage">
@@ -119,6 +138,9 @@ function App() {
         </Route>
         <Route path="/Deal">
           <Mydeal player={player} />
+        </Route>
+        <Route path="/Buy">
+          <Buy player={player} />
         </Route>
       </Switch>
     </div>

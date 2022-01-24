@@ -25,27 +25,29 @@
       width: 60%;
     }
   }
-  .NavBar_ul {
-    list-style: none;
-    padding: 0px;
-    margin: 0px;
-
+  .Navbar_text {
     width: max-content;
-    display: flex;
-    padding: 20px 0px;
 
-    .Logout {
-      &:hover {
-        background: rgb(66, 66, 161);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .NavBar_ul {
+      list-style: none;
+      padding: 0px;
+      margin: 0px;
+      display: flex;
+      padding: 20px 0px;
+
+      .Logout {
+        &:hover {
+          background: rgb(66, 66, 161);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
       }
-    }
 
-    li {
-      margin-right: 10%;
-      cursor: pointer;
-      width: max-content;
+      li {
+        margin-right: 10%;
+        cursor: pointer;
+        width: max-content;
+      }
     }
   }
 }

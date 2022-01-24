@@ -21,3 +21,4 @@ export { default as Popup } from "./Popup/Popup";
 export { default as Mydeal } from "./MyDeal/Mydeal";
 
 export { default as Selling } from "./Selling/Selling";
+export { default as Buy } from "./Buy/Buy";

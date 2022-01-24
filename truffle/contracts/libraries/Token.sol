@@ -23,17 +23,12 @@ contract Token is TokenInterface {
     string private _name;
     string private _symbol;
     uint256 private _decimals;
-    address private _owner;
-
-    modifier onlyOwner() {
-        require(msg.sender == _owner);
-        _;
-    }
+    address Token_owner;
 
     constructor(string memory TokenName_, string memory TokenSymbol_) {
         _name = TokenName_;
         _symbol = TokenSymbol_;
-        _owner = msg.sender;
+        Token_owner = msg.sender;
     }
 
     function totalSupply() public view override returns (uint256) {
@@ -66,7 +61,7 @@ contract Token is TokenInterface {
         return _check[account];
     }
 
-    function mintGold(uint256 amount, address to) public onlyOwner {
+    function mintGold(uint256 amount, address to) external {
         require(to != address(0), "No existed address");
         require(amount > 0);
         _check[to] = true;
@@ -79,10 +74,7 @@ contract Token is TokenInterface {
         emit Transfer(address(0), to, amount);
     }
 
-    function mintGoldAll(address[] memory _to, uint256 amount)
-        public
-        onlyOwner
-    {
+    function mintGoldAll(address[] memory _to, uint256 amount) external {
         string[] memory _address = new string[](_to.length);
         for (uint256 i = 0; i < _address.length; i++) {
             _balances[_to[i]] += amount;
@@ -95,7 +87,7 @@ contract Token is TokenInterface {
         address from,
         address recipient,
         uint256 amount
-    ) public virtual override onlyOwner returns (bool) {
+    ) external virtual override returns (bool) {
         _transfer(from, recipient, amount);
         emit Transfer(from, recipient, amount);
         return true;
@@ -130,11 +122,19 @@ contract Token is TokenInterface {
         emit Transfer(account, address(0), amount);
     }
 
-    function burn(address account, uint256 amount) public onlyOwner {
+    function burn(address account, uint256 amount) external {
         _burn(account, amount);
     }
 
     function showSymbol() public view returns (string memory) {
         return _symbol;
+    }
+
+    function showTokenOwner() public view returns (address) {
+        return Token_owner;
+    }
+
+    function TEST_token() public view returns (address) {
+        return msg.sender;
     }
 }
