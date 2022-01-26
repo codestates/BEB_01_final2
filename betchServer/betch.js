@@ -26,14 +26,14 @@ export const changeStatus = () => {
   check = !check;
 };
 
-app.get("/", (req, res) => {
-  giveTokenBlockChain();
-});
-
 schedule.scheduleJob(rule, () => {
   if (check === false) {
     giveTokenBlockChain();
   }
+});
+
+app.get("/", (req, res) => {
+  giveTokenBlockChain();
 });
 
 mongoose

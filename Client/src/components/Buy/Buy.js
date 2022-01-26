@@ -1,7 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Web3 from "web3";
 import "./Buy.scss";
-function Buy({ player }) {
+import Swal from "sweetalert2";
+
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
+
+function Buy({ player, contract, CA }) {
   const [eth, SetEth] = useState(0);
   const [Token, SetToken] = useState(0);
   const [eth_to_token, Set_eth_to_token] = useState(true);
@@ -41,24 +47,72 @@ function Buy({ player }) {
   const send_swap = async () => {
     if (eth_to_token === true) {
       if (balance_Eth >= eth && eth > 0) {
-        await axios.post("http://localhost:8080/Swap/eth_Token", {
-          eth: eth,
-          address: player.address,
+        const web3 = await new Web3(window.ethereum);
+        const value = await web3.utils.toWei(eth, "ether");
+        console.log(value);
+        let tx = {
+          from: player.address,
+          to: CA,
+          gas: 5000000,
+          data: contract.methods.buyTokens().encodeABI(),
+          value: value,
+        };
+
+        alert_function(player.address);
+        await web3.eth.sendTransaction(tx).then(async (trs, err) => {
+          if (!err) console.log(trs);
+          else {
+            console.log(trs);
+          }
         });
+        await axios
+          .post("http://localhost:8080/Swap/eth_Token", {
+            Token: Token,
+            address: player.address,
+          })
+          .then((result) => {
+            if (result.data.message === "Token Swap!") {
+              success_alert();
+            }
+          });
       } else {
         alert("이더가 없습니다.");
       }
     } else {
       if (balance_Token >= Token && Token > 0) {
-        await axios.post("http://localhost:8080/Swap/Token_eth", {
-          eth: eth,
-          Token: Token,
-          address: player.address,
-        });
+        // await axios.post("http://localhost:8080/Swap/Token_eth", {
+        //   eth: eth,
+        //   Token: Token,
+        //   address: player.address,
+        // });
       } else {
         alert("토큰이 부족합니다..");
       }
     }
+  };
+
+  const alert_function = (from) => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "center",
+      showConfirmButton: true,
+      timer: 5000,
+      timerProgressBar: true,
+    });
+
+    Toast.fire({
+      icon: "success",
+      title: "Transaction_Sucess!! plz Waiting a minute!",
+      text: from,
+    });
+  };
+
+  const success_alert = () => {
+    MySwal.fire({
+      icon: "success",
+      title: "Transaction",
+      text: "Swapping Success!!",
+    });
   };
 
   useEffect(() => {
@@ -113,10 +167,11 @@ function Buy({ player }) {
           <button className="Buy_button" onClick={send_swap}>
             스왑!
           </button>
-          <div>시세 적어야함</div>
+          <div>1ETH = 100000000 Token</div>
         </div>
         <div className="balance">Your_balance_eth : {balance_Eth} </div>
         <div className="balance">Your_balance_Token : {balance_Token} </div>
+        <div className="balance">Your_address : {player.address} </div>
       </div>
     </div>
   );

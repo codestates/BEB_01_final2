@@ -62,6 +62,8 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
         emit TokenPurchased(msg.sender, tokenAmount, owner);
     }
 
+    // 0x6F8E9daca7Db2C63Ec2A8529Cb8B1bdFF683A36e
+    // 0xaea07e179dfc59dd118005a4a56768a51ad8f48b
     function goldMint(address to, uint256 amount) public onlyowner {
         gold.mintGold(amount, to);
     }

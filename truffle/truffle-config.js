@@ -18,7 +18,7 @@ module.exports = {
   },
 
   contracts_directory: "./contracts",
-  contracts_build_directory: "../Server/abi",
+  contracts_build_directory: "./abi",
 
   compilers: {
     solc: {

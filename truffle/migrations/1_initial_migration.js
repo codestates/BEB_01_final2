@@ -14,7 +14,7 @@ module.exports = async function (deployer) {
   const character = await Character.deployed();
 
   fs.writeFileSync(
-    path.join(basePath, "/Server/CA/character_CA"),
+    path.join(basePath, "/truffle/CA/character_CA"),
     character.address
   );
 
@@ -22,7 +22,7 @@ module.exports = async function (deployer) {
   const auction = await Auction_hojin.deployed();
 
   fs.writeFileSync(
-    path.join(basePath, "/Server/CA/auction_CA"),
+    path.join(basePath, "/truffle/CA/auction_CA"),
     auction.address
   );
 };

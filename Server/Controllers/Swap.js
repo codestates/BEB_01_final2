@@ -1,12 +1,19 @@
-import { buyToken } from "../web3/web3.js";
-
+import { CharacetrDB, UserDB } from "../models.js";
 export const eth_Token = async (req, res) => {
   const address = req.body.address;
-  const ETH = req.body.eth;
+  const Token = req.body.Token;
 
-  const result = await buyToken(address, ETH);
+  const account = await UserDB.findOne({ address: address });
 
-  console.log(result);
+  await UserDB.findOneAndUpdate(
+    { address: address },
+    {
+      Token: account.Token + Token,
+    },
+    { new: true }
+  );
+
+  res.status(200).send({ message: "Token Swap!" });
 };
 
 export const Token_eth = async (req, res) => {

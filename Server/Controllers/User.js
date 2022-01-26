@@ -14,10 +14,7 @@ export const makeUser = async (req, res) => {
   if (IdCh.length !== 0) {
     res.status(200).send({ message: "아이디 중복!" });
   } else {
-    let account;
-    try {
-      account = web3.eth.accounts.create(ACCESS_SECRET);
-    } catch {}
+    let account = await web3.eth.accounts.create();
 
     const makeUser = await new UserDB({
       ID: ID,
@@ -33,6 +30,7 @@ export const makeUser = async (req, res) => {
     makeDBCharacter.save();
 
     makeCharacter(account.address);
+
     res.status(200).send({
       message: "아이디 생성 완료!",
       User: makeUser,
@@ -48,9 +46,7 @@ export const AllUser = async (req, res) => {
 export const Login = async (req, res) => {
   const ID = req.body.ID;
   const password = req.body.password;
-  console.log(ID);
   const ch = await UserDB.findOne({ ID: ID, password: password });
-  console.log(ch);
   if (ch === null) {
     res.status(200).send({ message: "실패.." });
   } else {
@@ -123,7 +119,6 @@ export const vefiry_google = async (req, res) => {
 
 export const vefiry_metamask = async (req, res) => {
   const address = req.body.address;
-  console.log(address);
 };
 
 export const charge = async (req, res) => {

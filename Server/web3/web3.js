@@ -1,14 +1,10 @@
 import Web3 from "web3";
 import dotenv from "dotenv";
 dotenv.config();
-import { nonce } from "../app.js";
-import {
-  deposit_TokenDB,
-  deposit_TokenDB_No_address,
-} from "../functions/TokenDB.js";
 
 import { Auction_abi, character_abi } from "./abi_total.js";
 import { character_CA, auction_CA } from "./CA_total.js";
+import { TokenDB } from "../models.js";
 
 export const web3 = new Web3(
   new Web3.providers.HttpProvider(process.env.infuraURL)
@@ -29,17 +25,11 @@ export const mintTokenArray = async (address) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.goldmintAll(address, 10).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-    console.log("DB : mint_All실행!!");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -48,17 +38,11 @@ export const mintToken = async (address, amount) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.goldMint(address, amount).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-    console.log("DB : mint_token실행!");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -67,17 +51,11 @@ export const makeCharacter = async (address) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.makeCharacter(address).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-    console.log("DB : block 캐릭터 생성 완료!");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -96,18 +74,11 @@ export const mintNFT = async (address, img) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.NFTminting(address, img).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-
-    console.log("DB : block NFT 생성 완료!");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -116,17 +87,11 @@ export const UpPow = async (address, random) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.IncreasePow(address, random).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-    console.log("DB : UpPow");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -135,17 +100,11 @@ export const UpLimit = async (address) => {
     let tx = {
       from: process.env.Server_Address,
       to: character_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.IncreaseLimit(address).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, address);
-      });
-    console.log("DB : UpLimit");
+    const temp = await new TokenDB({ tx: tx, contract: "Character" });
+    temp.save();
   });
 };
 
@@ -154,17 +113,11 @@ export const makeTrade = async (price, idx) => {
     let tx = {
       from: process.env.Server_Address,
       to: auction_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.make_trade(price, idx).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB_No_address(Tx);
-      });
-    console.log("DB : making Trade!!");
+    const temp = await new TokenDB({ tx: tx, contract: "Auction" });
+    temp.save();
   });
 };
 
@@ -173,17 +126,11 @@ export const Bidding = async (price, buyer, idx) => {
     let tx = {
       from: process.env.Server_Address,
       to: auction_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.Bid(price, buyer, idx).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB(Tx, buyer);
-      });
-    console.log("DB : Bidding!!!");
+    const temp = await new TokenDB({ tx: tx, contract: "Auction" });
+    temp.save();
   });
 };
 
@@ -192,17 +139,11 @@ export const trade = async (idx) => {
     let tx = {
       from: process.env.Server_Address,
       to: auction_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.trade(idx).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB_No_address(Tx);
-      });
-    console.log("DB : Trade!");
+    const temp = await new TokenDB({ tx: tx, contract: "Auction" });
+    temp.save();
   });
 };
 
@@ -211,31 +152,27 @@ export const tradeOff = async (idx) => {
     let tx = {
       from: process.env.Server_Address,
       to: auction_CA,
-      nonce: nonce,
-      gas: 500000,
-      gaslimit: 1000000,
+      gas: 5000000,
       data: method.tradeOff(idx).encodeABI(),
     };
-    await web3.eth.accounts
-      .signTransaction(tx, process.env.Server_PrivateKey)
-      .then(async (Tx) => {
-        deposit_TokenDB_No_address(Tx);
-      });
-    console.log("DB : Trade_Off");
+    const temp = await new TokenDB({ tx: tx, contract: "Auction" });
+    temp.save();
   });
 };
 
 export const buyToken = async (address, ETH) => {
   CharacterContract().then(async (method) => {
-    let tx = {
-      from: address,
-      to: character_CA,
-      gas: 500000,
-      gaslimit: 1000000,
-      data: method.buyTokens().encodeABI(),
-      value: await web3.utils.toWei(ETH, "ether"),
-    };
-    await web3.eth.sendTransaction(tx);
+    // Client에서 직접 트랜잭션에 서명하도록 바꾸었음
+    // 이 함수는 사용하지 않음
+    // let tx = {
+    //   from: address,
+    //   to: character_CA,
+    //   gas: 500000,
+    //   gaslimit: 1000000,
+    //   data: method.buyTokens().encodeABI(),
+    //   value: await web3.utils.toWei(ETH, "ether"),
+    // };
+    // await web3.eth.sendTransaction(tx);
   });
   return "hoijn";
 };

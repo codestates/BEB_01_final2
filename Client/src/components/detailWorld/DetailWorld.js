@@ -75,7 +75,7 @@ function DetailWorld({ player }) {
         <div className="detail_wrap">
           {data.owner === "none" ? (
             <img
-              src="https://www.wallpapertip.com/wmimgs/7-75917_zelda-wallpapers8-zelda-wallpaper-4k-desktop.jpg"
+              src="https://w.namu.la/s/8a8084fae064afe8bdebaf11be04dad8b8dbb38cc4fa3f485818aa7ca438695822a4d03c52a908b0a2532f0fa2af500bf2e5386641d90c3b0a6e6ce62eb4a58878d2e8c3a7ba46e051f6c53b9b834008"
               className="img"
             />
           ) : (
