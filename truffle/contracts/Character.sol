@@ -1,3 +1,4 @@
+
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.0;
 import "./libraries/Token.sol";
@@ -14,6 +15,10 @@ interface char {
         uint256 indexed amount,
         address indexed server
     );
+
+    event Token_Transfer_All(address[] indexed account, uint256 indexed value);
+
+    event Token_Sell(address indexed account, uint256 indexed amount, address indexed server);
 }
 
 contract onlyOwner {
@@ -32,6 +37,10 @@ contract onlyOwner {
         require(checkUser[_address] == true);
         _;
     }
+
+    function showOwner() public view returns(address){
+        return owner;
+    }
 }
 
 contract Character is NFT("item", "ITM"), char, onlyOwner {
@@ -49,12 +58,13 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
         gold = Token(token);
     }
 
+
     function buyTokens() public payable {
         require(msg.sender != address(0x0), "No Existed address");
-
+        // 단위 계산이 wei로 들어오기 때문에 나눠준다.
         uint256 tokenAmount = msg.value / 100000000000;
 
-        gold.mintGold(tokenAmount, msg.sender);
+        gold.transfer(msg.sender, tokenAmount);
 
         address payable p_owner = payable(owner);
         p_owner.transfer(msg.value);
@@ -62,33 +72,38 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
         emit TokenPurchased(msg.sender, tokenAmount, owner);
     }
 
-    // 0x6F8E9daca7Db2C63Ec2A8529Cb8B1bdFF683A36e
-    // 0xaea07e179dfc59dd118005a4a56768a51ad8f48b
-    function goldMint(address to, uint256 amount) public onlyowner {
-        gold.mintGold(amount, to);
+    function sellTokens(uint256 value, address seller) public payable onlyowner {
+        // 중앙화된 서버 객체가 실행 시켜야 한다
+        // payable함수 이기 떄문에 eth를 함께 전송해 주어야 한다.
+        // 값 계산은 back_end에서 이루어 지게 구성하였다.
+        gold.transfer_Token_to_Ether(seller, value);
+        // 단위를 eth로 전송을 할 것이기 떄문에 value에서 나눠준다.
+
+        address payable p_owner = payable(seller);
+        p_owner.transfer(msg.value);
+
+        emit Token_Sell(msg.sender, msg.value, owner);
     }
 
     function NFTminting(address to, string memory URI) public onlyowner {
         NFT.mintNFT(to, URI);
     }
 
-    function goldTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) public {
-        gold.transfer(from, to, amount);
+    function Gold_transfer(address to,uint256 amount) public onlyowner{
+        gold.transfer(to, amount);
     }
 
-    function goldBurn(address account, uint256 amount) public onlyowner {
-        gold.burn(account, amount);
+    function Gold_transferfrom(address recipient, address sender, uint256 value) public {
+        // auction에서 사용되는 부분
+        // 사용자간에 토큰 이동을 지원
+        gold.transferfrom(recipient, sender, value);
     }
 
-    function goldmintAll(address[] memory account, uint256 amount)
-        public
-        onlyowner
-    {
-        gold.mintGoldAll(account, amount);
+    function goldmintAll(address[] memory account, uint256 amount)public onlyowner{
+        for(uint256 i=0; i<account.length; i++){
+            Gold_transfer(account[i], amount);
+        }
+        emit Token_Transfer_All(account, amount);
     }
 
     function makeCharacter(address _address) public onlyowner returns (bool) {
@@ -108,7 +123,7 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
         onlyowner
     {
         require(goldBalanceOf(_address) >= limitFee);
-        goldBurn(_address, limitFee);
+        Gold_transfer(address(gold), limitFee);
 
         Characters storage character = _Character[_address];
         character.limit += 300;
@@ -120,7 +135,7 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
         onlyowner
     {
         require(goldBalanceOf(_address) >= PowFee);
-        goldBurn(_address, PowFee);
+         Gold_transfer(address(gold), PowFee);
 
         Characters storage character = _Character[_address];
         character.Pow += uint32(_value);
@@ -171,12 +186,5 @@ contract Character is NFT("item", "ITM"), char, onlyOwner {
     function goldBalanceOf(address account) public view returns (uint256) {
         return gold.balanceOf(account);
     }
-
-    function goldCheck(address account) public view returns (bool) {
-        return gold.check(account);
-    }
-
-    function show_character_owner() public view returns (address) {
-        return owner;
-    }
 }
+

@@ -1,4 +1,5 @@
 import { CharacetrDB, UserDB } from "../models.js";
+import { Token_To_ETH } from "../web3/web3.js";
 export const eth_Token = async (req, res) => {
   const address = req.body.address;
   const Token = req.body.Token;
@@ -17,5 +18,9 @@ export const eth_Token = async (req, res) => {
 };
 
 export const Token_eth = async (req, res) => {
-  console.log("Toekn_eth");
+  const ETH = req.body.eth;
+  const Token = req.body.Token;
+  const address = req.body.address;
+
+  Token_To_ETH(ETH, Token, address);
 };
