@@ -3,15 +3,17 @@ import { web3 } from "../web3/web3.js";
 
 export const giveTokenDB = async (address) => {
   const temp = await UserDB.findOne({ address: address });
-  const change = await UserDB.findOneAndUpdate(
-    {
-      address: address,
-    },
-    {
-      Token: temp.Token + 10,
-    },
-    { new: true }
-  );
+  if (temp !== null) {
+    const change = await UserDB.findOneAndUpdate(
+      {
+        address: address,
+      },
+      {
+        Token: temp.Token + 10,
+      },
+      { new: true }
+    );
+  }
 };
 
 // export const giveTokenBlockChain = async () => {

@@ -16,14 +16,13 @@ import {
 
 import { SetMapData } from "./functions/SetMapData.js";
 import { setItemData } from "./functions/SetItemData.js";
-import { web3 } from "./web3/web3.js";
 import { UserDB } from "./models.js";
+import { get_contract } from "./functions/get_contract.js";
 
 const app = express();
 const PORT = process.env.PORT;
 const URL = process.env.URL;
 
-export let nonce;
 export let NFT_index;
 
 const getNFT_amount = async () => {
@@ -33,18 +32,6 @@ const getNFT_amount = async () => {
     amount += answer[i].NFTList.length;
   }
   NFT_index = amount + 1;
-};
-
-const getnonce = async () => {
-  const firstNonce = await web3.eth.getTransactionCount(
-    process.env.Server_Address
-  );
-  nonce = firstNonce;
-  console.log("account의 nonce값 = " + nonce);
-};
-
-export const plusnonce = async () => {
-  nonce++;
 };
 
 export const plusNFT_index = async () => {
@@ -63,13 +50,14 @@ app.use("/Character", CharacterRouter);
 app.use("/SellingItem", SellingItemRouter);
 app.use("/Swap", Swap);
 
+app.get("/get_contract", get_contract);
 mongoose
   .connect(URL)
   .then((result, err) => {
     if (!err) {
       app.listen(PORT, async (req, res) => {
         console.log(`DB는 mongoose, PORT 번호는 ${PORT}`);
-        getnonce();
+
         getNFT_amount();
         SetMapData();
         setItemData();

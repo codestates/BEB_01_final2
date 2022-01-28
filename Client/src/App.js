@@ -20,6 +20,7 @@ import OpenLogin from "@toruslabs/openlogin";
 import { VERIFIER } from "./utils/function/openLogin";
 import { ethers } from "ethers";
 import axios from "axios";
+import Web3 from "web3";
 
 function App() {
   const [user, SetUser] = useState(window.localStorage.getItem("User"));
@@ -31,8 +32,10 @@ function App() {
   const [metamask_address, SetMetamask_address] = useState(
     window.localStorage.getItem("meta_User") || false
   );
+  const [contract, SetContract] = useState(false);
+  const [CA, SetCA] = useState(false);
 
-  const onMount = async () => {
+  const open_logoin = async () => {
     const openlogin = new OpenLogin({
       clientId: VERIFIER.clientId,
       network: "testnet",
@@ -55,7 +58,6 @@ function App() {
   };
   const getUserData = async () => {
     if (user !== null) {
-      console.log(user);
       await axios
         .get("http://localhost:8080/vefiry", {
           headers: {
@@ -86,9 +88,24 @@ function App() {
     }
   };
 
+  const get_contract = async () => {
+    await axios
+      .get("http://localhost:8080/get_contract")
+      .then(async (contract) => {
+        const web3 = await new Web3(window.ethereum);
+        SetCA(contract.data.CA);
+        const Contract = await new web3.eth.Contract(
+          contract.data.abi,
+          contract.data.CA
+        );
+        SetContract(Contract);
+      });
+  };
+
   useEffect(() => {
-    onMount();
+    open_logoin();
     getUserData();
+    get_contract();
   }, [address]);
 
   return (
@@ -140,7 +157,7 @@ function App() {
           <Mydeal player={player} />
         </Route>
         <Route path="/Buy">
-          <Buy player={player} />
+          <Buy player={player} contract={contract} CA={CA} />
         </Route>
       </Switch>
     </div>
