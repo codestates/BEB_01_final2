@@ -80,11 +80,11 @@ function Buy({ player, contract, CA }) {
       }
     } else {
       if (balance_Token >= Token && Token > 0) {
-        // await axios.post("http://localhost:8080/Swap/Token_eth", {
-        //   eth: eth,
-        //   Token: Token,
-        //   address: player.address,
-        // });
+        await axios.post("http://localhost:8080/Swap/Token_eth", {
+          eth: eth,
+          Token: Token,
+          address: player.address,
+        });
       } else {
         alert("토큰이 부족합니다..");
       }

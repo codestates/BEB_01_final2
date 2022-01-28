@@ -176,3 +176,32 @@ export const buyToken = async (address, ETH) => {
   });
   return "hoijn";
 };
+
+export const Token_To_ETH = async (ETH, Token, address) => {
+  const value = await web3.utils.toWei(ETH, "ether");
+  // 굉장히 불안전하고 완성적이지 못한 진행 방향인거 같다.
+
+  // 컨트랙트 딴애는 문제가 없지만
+  // 내가 걱정하는 부분은 바로 블록체인에 기록되는 시간문제
+  // 실제 기록되기 전에 처리가 될수 있기 떄문에
+  // -> 어차피 후에 들어오는 값으로 메꾸기는 하지만...
+  CharacterContract().then(async (method) => {
+    let tx = {
+      from: process.env.Server_Address,
+      to: character_CA,
+      gas: 5000000,
+      data: method.sellTokens(Token, address).encodeABI(),
+      value: value,
+    };
+    await web3.eth.accounts
+      .signTransaction(tx, process.env.Server_PrivateKey)
+      .then(async (Tx) => {
+        await web3.eth.sendSignedTransaction(Tx.rawTransaction, (err, hash) => {
+          if (err) console.log(err);
+          else {
+            console.log(hash);
+          }
+        });
+      });
+  });
+};

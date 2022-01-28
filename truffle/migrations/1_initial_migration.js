@@ -1,5 +1,5 @@
 const fs = require("fs");
-const basePath = "/Users/yuhojin/Desktop/BEB_01_final2-contract";
+const basePath = "/Users/yuhojin/Desktop/BEB_01_final2";
 const path = require("path");
 
 const Token = artifacts.require("Token");

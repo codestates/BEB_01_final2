@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.0;
 
-import "./Characeter.sol";
+import "./Character.sol";
 
 interface Auction_test {
     function Bid(
@@ -76,7 +76,7 @@ contract Auction is Auction_test {
         uint256 Room_number
     ) public override returns (bool) {
         uint256 balance = character.goldBalanceOf(_buyer);
-        require(price < balance, "price exceeds balance");
+        require(price <= balance, "price exceeds balance");
         require(check_room[Room_number] == true, "No existed Room!!!");
         Room storage room = Room_Number[Room_number];
         require(room.price < price, "need to be higher than highest price");
@@ -91,8 +91,12 @@ contract Auction is Auction_test {
         Room storage room = Room_Number[room_number];
         uint256 fee = room.price / 10;
         uint256 amount = room.price - fee;
-        character.goldTransfer(room.buyer, room.seller, amount);
-        character.goldTransfer(room.buyer, msg.sender, fee);
+
+        // 토큰 전송 과정
+        character.Gold_transferfrom(character.showOwner(), room.seller, fee);
+        character.Gold_transferfrom(room.seller, room.buyer, amount);
+
+        //NFT 전송 과정
         character.transferFrom(room.seller, room.buyer, room.product);
         emit trade_end(room.seller, room.buyer, room.price);
         emit trade_end_tax(room_number, fee);

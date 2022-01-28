@@ -1,5 +1,5 @@
 import fs from "fs";
-const basePath = "/Users/yuhojin/Desktop/BEB_01_final2-contract";
+const basePath = "/Users/yuhojin/Desktop/BEB_01_final2";
 import path from "path";
 
 const character_json = fs.readFileSync(
