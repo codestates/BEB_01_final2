@@ -6,4 +6,4 @@ BEB_01기 Project_3
 
 서버 및 DB : 유호진
 
-기본 홈페이지 구조
+https://codestates.notion.site/3-9195caba625842e0a2ca213788a34368?p=96681e57345f4c8a87bdce6195ae4396
